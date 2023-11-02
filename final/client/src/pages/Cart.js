@@ -1,9 +1,9 @@
-import { useAuth } from "../context/auth";
-import { useCart } from "../context/cart";
-import Jumbotron from "../components/cards/Jumbotron";
-import { useNavigate } from "react-router-dom";
-import UserCartSidebar from "../components/cards/UserCartSidebar";
-import ProductCardHorizontal from "../components/cards/ProductCardHorizontal";
+import { useAuth } from '../context/auth';
+import { useCart } from '../context/cart';
+import Jumbotron from '../components/cards/Jumbotron';
+import { useNavigate } from 'react-router-dom';
+import UserCartSidebar from '../components/cards/UserCartSidebar';
+import ProductCardHorizontal from '../components/cards/ProductCardHorizontal';
 
 export default function Cart() {
   // context
@@ -19,9 +19,9 @@ export default function Cart() {
         subTitle={
           cart?.length
             ? `You have ${cart.length} items in the cart. ${
-                auth?.token ? "" : "Please login to checkout"
+                auth?.token ? '' : 'Please login to checkout'
               }`
-            : "Your cart is empty"
+            : 'Your cart is empty'
         }
       />
 
@@ -30,12 +30,12 @@ export default function Cart() {
           <div className="col-md-12">
             <div className="p-3 mt-2 mb-2 h4 bg-light text-center">
               {cart?.length ? (
-                "My Cart"
+                'My Cart'
               ) : (
                 <div className="text-center">
                   <button
                     className="btn btn-primary"
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate('/')}
                   >
                     Continue Shopping
                   </button>

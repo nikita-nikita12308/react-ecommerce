@@ -11,11 +11,7 @@
   border-radius: 0px;
 }
 
-.hoverable:hover {
-  border-right: 5px solid #0d6efd;
-  border-bottom: 5px solid #0d6efd;
-  border-radius: 12px;
-}
+
 
 .ant-checkbox-wrapper:first-of-type {
   margin-left: 8px;
@@ -72,4 +68,19 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+.input_number {
+  width: 50px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+}
+
+.input_number:focus {
+  border-color: #4caf50;
 }
