@@ -38,20 +38,12 @@ export default function ProductCard({ p }) {
 
       <div className="card-body">
         <h5>{p?.name}</h5>
-
         <h4 className="fw-bold">
-          {newPrice.toLocaleString('en-US', {
+          {newPrice.toLocaleString('uk-UA', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'UAH',
           })}
-          <input
-            className="input_number"
-            type="number"
-            value={quantity}
-            onChange={(e) => updateQuantity(e.target.value)}
-          />
         </h4>
-
         <p className="card-text">{p?.description?.substring(0, 60)}...</p>
       </div>
 

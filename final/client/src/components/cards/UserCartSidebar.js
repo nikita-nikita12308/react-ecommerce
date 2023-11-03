@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../context/auth";
-import { useCart } from "../../context/cart";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import DropIn from "braintree-web-drop-in-react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/auth';
+import { useCart } from '../../context/cart';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import DropIn from 'braintree-web-drop-in-react';
+import toast from 'react-hot-toast';
 
 export default function UserCartSidebar() {
   // context
   const [auth, setAuth] = useAuth();
   const [cart, setCart] = useCart();
   // state
-  const [clientToken, setClientToken] = useState("");
-  const [instance, setInstance] = useState("");
+  const [clientToken, setClientToken] = useState('');
+  const [instance, setInstance] = useState('');
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
   // hooks
   const navigate = useNavigate();
 
@@ -23,9 +24,17 @@ export default function UserCartSidebar() {
     }
   }, [auth?.token]);
 
+  const handleUpdateCart = () => {
+    const updatedTotal = cartTotal();
+    return updatedTotal.toLocaleString('uk-UA', {
+      style: 'currency',
+      currency: 'UAH',
+    });
+  };
+
   const getClientToken = async () => {
     try {
-      const { data } = await axios.get("/braintree/token");
+      const { data } = await axios.get('/braintree/token');
       setClientToken(data.clientToken);
     } catch (err) {
       console.log(err);
@@ -35,12 +44,9 @@ export default function UserCartSidebar() {
   const cartTotal = () => {
     let total = 0;
     cart.map((item) => {
-      total += item.price;
+      total += item.price * (item.cart_quantity || 1);
     });
-    return total.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+    return total;
   };
 
   const handleBuy = async () => {
@@ -48,16 +54,16 @@ export default function UserCartSidebar() {
       setLoading(true);
       const { nonce } = await instance.requestPaymentMethod();
       //   console.log("nonce => ", nonce);
-      const { data } = await axios.post("/braintree/payment", {
+      const { data } = await axios.post('/braintree/payment', {
         nonce,
         cart,
       });
       //   console.log("handle buy response => ", data);
       setLoading(false);
-      localStorage.removeItem("cart");
+      localStorage.removeItem('cart');
       setCart([]);
-      navigate("/dashboard/user/orders");
-      toast.success("Payment successful");
+      navigate('/dashboard/user/orders');
+      toast.success('Payment successful');
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -66,10 +72,18 @@ export default function UserCartSidebar() {
 
   return (
     <div className="col-md-4 mb-5">
-      <h4>Your cart summary</h4>
+      <h4>
+        Your cart summary{' '}
+        <button
+          onClick={handleUpdateCart}
+          className="btn btn-outline-primary btn-sm"
+        >
+          Update
+        </button>
+      </h4>
       Total / Address / Payments
       <hr />
-      <h6>Total: {cartTotal()}</h6>
+      <h6>Total: {handleUpdateCart()}</h6>
       {auth?.user?.address ? (
         <>
           <div className="mb-3">
@@ -79,7 +93,7 @@ export default function UserCartSidebar() {
           </div>
           <button
             className="btn btn-outline-warning"
-            onClick={() => navigate("/dashboard/user/profile")}
+            onClick={() => navigate('/dashboard/user/profile')}
           >
             Update address
           </button>
@@ -89,7 +103,7 @@ export default function UserCartSidebar() {
           {auth?.token ? (
             <button
               className="btn btn-outline-warning"
-              onClick={() => navigate("/dashboard/user/profile")}
+              onClick={() => navigate('/dashboard/user/profile')}
             >
               Add delivery address
             </button>
@@ -97,8 +111,8 @@ export default function UserCartSidebar() {
             <button
               className="btn btn-outline-danger mt-3"
               onClick={() =>
-                navigate("/login", {
-                  state: "/cart",
+                navigate('/login', {
+                  state: '/cart',
                 })
               }
             >
@@ -109,14 +123,14 @@ export default function UserCartSidebar() {
       )}
       <div className="mt-3">
         {!clientToken || !cart?.length ? (
-          ""
+          ''
         ) : (
           <>
             <DropIn
               options={{
                 authorization: clientToken,
                 paypal: {
-                  flow: "vault",
+                  flow: 'vault',
                 },
               }}
               onInstance={(instance) => setInstance(instance)}
@@ -126,7 +140,7 @@ export default function UserCartSidebar() {
               className="btn btn-primary col-12 mt-2"
               disabled={!auth?.user?.address || !instance || loading}
             >
-              {loading ? "Processing..." : "Buy"}
+              {loading ? 'Processing...' : 'Buy'}
             </button>
           </>
         )}

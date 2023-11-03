@@ -27,7 +27,7 @@
   width: 30wh;
   height: 30vh;
   color: #fff;
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background: linear-gradient(-45deg, #E6E6FA, #75C5E2, #009AC7, #00638C);
   background-size: 400% 400%;
   -webkit-animation: Gradient 15s ease infinite;
   -moz-animation: Gradient 15s ease infinite;
@@ -73,9 +73,9 @@
 .input_number {
   width: 50px;
   height: 30px;
-  padding: 5px;
+  padding-right:10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 14px;
   text-align: center;
   outline: none;
@@ -83,4 +83,16 @@
 
 .input_number:focus {
   border-color: #4caf50;
+}
+
+.bg-tertiary-color {
+  background-color: #ADD8E6;
+  /* other styles */
+}
+
+.btn-lavander {
+  background-color: #98FB98;
+}
+.btn-mint {
+  background-color: #E6E6FA;
 }

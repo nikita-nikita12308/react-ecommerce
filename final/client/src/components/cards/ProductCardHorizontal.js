@@ -5,14 +5,22 @@ import React, { useState } from 'react';
 export default function ProductCardHorizontal({ p, remove = true }) {
   // context
   const [cart, setCart] = useCart();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(p.cart_quantity || 1);
   let newPrice = p.price * quantity;
-
   const updateQuantity = (newQuantity) => {
-    setQuantity(newQuantity);
-    // Тут ви також можете оновити кількість товару в кошику, використовуючи ваш контекст кошика
-  };
+    if (newQuantity > p.quantity) return;
+    const updatedQuantity = newQuantity < 1 ? 1 : newQuantity;
+    setQuantity(updatedQuantity);
 
+    const updatedCart = cart.map((item) => {
+      if (item._id === p._id) {
+        return { ...item, cart_quantity: updatedQuantity };
+      }
+      return item;
+    });
+
+    setCart(updatedCart);
+  };
   const removeFromCart = (productId) => {
     let myCart = [...cart];
     let index = myCart.findIndex((item) => item._id === productId);
@@ -44,21 +52,22 @@ export default function ProductCardHorizontal({ p, remove = true }) {
           <div className="card-body">
             <h5 className="card-title">
               {p.name}{' '}
-              {newPrice.toLocaleString('en-US', {
+              {newPrice.toLocaleString('uk-UA', {
                 style: 'currency',
-                currency: 'USD',
+                currency: 'UAH',
               })}
             </h5>
             <p className="card-text">{`${p?.description?.substring(
               0,
               50
             )}..`}</p>
+            Кількість:
             <input
+              className="input_number"
               type="number"
               value={quantity}
               onChange={(e) => updateQuantity(e.target.value)}
             />
-            {/* Додайте блок, який відображатиме ціну залежно від кількості */}
           </div>
         </div>
 
