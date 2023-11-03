@@ -13,7 +13,6 @@ export default function ProductCard({ p }) {
   const navigate = useNavigate();
   const updateQuantity = (newQuantity) => {
     setQuantity(newQuantity);
-    // Тут ви також можете оновити кількість товару в кошику, використовуючи ваш контекст кошика
   };
   return (
     <div className="card mb-3 hoverable">
