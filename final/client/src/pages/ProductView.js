@@ -16,6 +16,7 @@ import {
 import ProductCard from '../components/cards/ProductCard';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/cart';
+import CommentsList from '../components/cards/CommentsSection';
 
 export default function ProductView() {
   // context
@@ -23,6 +24,9 @@ export default function ProductView() {
   // state
   const [product, setProduct] = useState({});
   const [related, setRelated] = useState([]);
+  const [commentsData, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [newRating, setNewRating] = useState(0);
   // hooks
   const params = useParams();
 
@@ -35,6 +39,7 @@ export default function ProductView() {
       const { data } = await axios.get(`/product/${params.slug}`);
       setProduct(data);
       loadRelated(data._id, data.category._id);
+      loadComments(data._id);
     } catch (err) {
       console.log(err);
     }
@@ -48,6 +53,50 @@ export default function ProductView() {
       setRelated(data);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const loadComments = async (productId) => {
+    try {
+      const { data } = await axios.get(`/product/comment/${productId}`);
+      setComments(data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleAddComment = async () => {
+    const { commentData } = await axios.post(
+      `/product/comment/${product._id}`,
+      {
+        text: newComment,
+        rating: newRating,
+      }
+    );
+    if (commentData?.error) {
+      toast.error(commentData.error);
+    } else {
+      toast.success(`Comment is created`);
+    }
+    setNewComment('');
+    setNewRating(0);
+  };
+
+  const handleReply = async (commentId, replyText) => {
+    try {
+      const { replyData } = await axios.post(`/comment/${commentId}/replies`, {
+        text: replyText,
+      });
+      if (replyData?.error) {
+        toast.error(replyData.error);
+      } else {
+        toast.success(`Comment is created`);
+        console.log('Comments data before loadComments ' + commentsData);
+        loadComments(product._id);
+        console.log('Comments data after loadComments ' + commentsData);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to add a reply');
     }
   };
 
@@ -127,6 +176,35 @@ export default function ProductView() {
               Add to Cart
             </button>
           </div>
+          <h4>Коментарі</h4>
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Новий коментар"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <div className="input-group-append">
+              {/* Випадаючий список для вибору рейтингу */}
+              <select
+                className="form-select"
+                value={newRating}
+                onChange={(e) => setNewRating(e.target.value)}
+              >
+                <option value={0}>Оберіть рейтинг</option>
+                <option value={1}>1 зірка</option>
+                <option value={2}>2 зірки</option>
+                <option value={3}>3 зірки</option>
+                <option value={4}>4 зірки</option>
+                <option value={5}>5 зірок</option>
+              </select>
+            </div>
+            <button className="btn btn-primary" onClick={handleAddComment}>
+              Додати
+            </button>
+          </div>
+          <CommentsList comments={commentsData} handleReply={handleReply} />
         </div>
 
         <div className="col-md-3">
@@ -136,59 +214,6 @@ export default function ProductView() {
           {related?.map((p) => (
             <ProductCard p={p} key={p._id} />
           ))}
-        </div>
-      </div>
-      <h4>Коментарі</h4>
-      <div className="d-flex flex-column flex-md-row p-4 gap-4 py-md-5">
-        <div className="list-group list-group-checkable d-grid gap-2 border-0">
-          <div>
-            <label
-              className="list-group-item rounded-3 py-3"
-              htmlFor="listGroupCheckableRadios1"
-            >
-              Andre
-              <span className="d-block small opacity-50">
-                With support text underneath to add more detail
-                dqwqwdwdqwdqwdddddddddddddddddddddddddddddd
-              </span>
-            </label>
-          </div>
-
-          <div>
-            <label
-              className="list-group-item rounded-3 py-3"
-              htmlFor="listGroupCheckableRadios2"
-            >
-              Maria
-              <span className="d-block small opacity-50">
-                Some other text goes here
-              </span>
-            </label>
-          </div>
-
-          <div>
-            <label
-              className="list-group-item rounded-3 py-3"
-              htmlFor="listGroupCheckableRadios3"
-            >
-              RRayan23
-              <span className="d-block small opacity-50">
-                And we end with another snippet of text
-              </span>
-            </label>
-          </div>
-
-          <div>
-            <label
-              className="list-group-item rounded-3 py-3"
-              htmlFor="listGroupCheckableRadios4"
-            >
-              Borgomi
-              <span className="d-block small opacity-50">
-                This option is disabled
-              </span>
-            </label>
-          </div>
         </div>
       </div>
     </div>

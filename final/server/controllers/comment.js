@@ -48,3 +48,21 @@ export const createReply = async (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to create reply' });
   }
 };
+
+export const listComments = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const comments = await Comment.find({ product: productId })
+      .populate({
+        path: 'user',
+        select: 'name',
+      })
+      .populate({
+        path: 'replies.user',
+        select: 'name',
+      });
+    res.status(200).json({ data: comments });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

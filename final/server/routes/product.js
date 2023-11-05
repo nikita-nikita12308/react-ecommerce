@@ -23,7 +23,11 @@ import {
   orderStatus,
 } from '../controllers/product.js';
 
-import { createComment, createReply } from '../controllers/comment.js';
+import {
+  createComment,
+  createReply,
+  listComments,
+} from '../controllers/comment.js';
 
 router.post('/product', requireSignin, isAdmin, formidable(), create);
 router.get('/products', list);
@@ -41,6 +45,8 @@ router.get('/braintree/token', getToken);
 router.post('/braintree/payment', requireSignin, processPayment);
 router.put('/order-status/:orderId', requireSignin, isAdmin, orderStatus);
 
+// Comments
 router.post('/product/comment/:productId', requireSignin, createComment);
 router.post('/comment/:commentId/replies', requireSignin, createReply);
+router.get('/product/comment/:productId', listComments);
 export default router;
