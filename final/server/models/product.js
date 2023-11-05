@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { ObjectId } = mongoose.Schema;
 
 const productSchema = new mongoose.Schema(
@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: ObjectId,
-      ref: "Category",
+      ref: 'Category',
       required: true,
     },
     quantity: {
@@ -43,8 +43,9 @@ const productSchema = new mongoose.Schema(
       required: false,
       type: Boolean,
     },
+    comments: [{ type: ObjectId, ref: 'Comment' }],
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Product", productSchema);
+export default mongoose.model('Product', productSchema);
