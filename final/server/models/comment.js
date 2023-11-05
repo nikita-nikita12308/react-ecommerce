@@ -14,6 +14,7 @@ const commentSchema = new Schema(
     },
     text: {
       type: String,
+      minLength: 5,
       maxLength: 160,
     },
     rating: {
@@ -31,6 +32,7 @@ const commentSchema = new Schema(
         },
         text: {
           type: String,
+          minLength: 5,
           maxLength: 160,
         },
       },
