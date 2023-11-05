@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
+const { ObjectId } = mongoose.Schema;
 
 const userSchema = new Schema(
   {
@@ -28,8 +29,9 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    comments: [{ type: ObjectId, ref: 'Comment' }],
   },
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model('User', userSchema);
