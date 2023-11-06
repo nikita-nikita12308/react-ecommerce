@@ -27,6 +27,7 @@ import {
   createComment,
   createReply,
   listComments,
+  getAverageRating,
 } from '../controllers/comment.js';
 
 router.post('/product', requireSignin, isAdmin, formidable(), create);
@@ -49,4 +50,5 @@ router.put('/order-status/:orderId', requireSignin, isAdmin, orderStatus);
 router.post('/product/comment/:productId', requireSignin, createComment);
 router.post('/comment/:commentId/replies', requireSignin, createReply);
 router.get('/product/comment/:productId', listComments);
+router.get('/product/average-rating/:productId', getAverageRating);
 export default router;

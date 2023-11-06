@@ -1,8 +1,8 @@
-import User from "../models/user.js";
-import { hashPassword, comparePassword } from "../helpers/auth.js";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import Order from "../models/order.js";
+import User from '../models/user.js';
+import { hashPassword, comparePassword } from '../helpers/auth.js';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import Order from '../models/order.js';
 
 dotenv.config();
 
@@ -12,18 +12,18 @@ export const register = async (req, res) => {
     const { name, email, password } = req.body;
     // 2. all fields require validation
     if (!name.trim()) {
-      return res.json({ error: "Name is required" });
+      return res.json({ error: 'Name is required' });
     }
     if (!email) {
-      return res.json({ error: "Email is taken" });
+      return res.json({ error: 'Email is taken' });
     }
     if (!password || password.length < 6) {
-      return res.json({ error: "Password must be at least 6 characters long" });
+      return res.json({ error: 'Password must be at least 6 characters long' });
     }
     // 3. check if email is taken
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.json({ error: "Email is taken" });
+      return res.json({ error: 'Email is taken' });
     }
     // 4. hash password
     const hashedPassword = await hashPassword(password);
@@ -35,7 +35,7 @@ export const register = async (req, res) => {
     }).save();
     // 6. create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: '7d',
     });
     // 7. send response
     res.json({
@@ -58,24 +58,24 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     // 2. all fields require validation
     if (!email) {
-      return res.json({ error: "Email is taken" });
+      return res.json({ error: 'Email is taken' });
     }
     if (!password || password.length < 6) {
-      return res.json({ error: "Password must be at least 6 characters long" });
+      return res.json({ error: 'Password must be at least 6 characters long' });
     }
     // 3. check if email is taken
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ error: "User not found" });
+      return res.json({ error: 'User not found' });
     }
     // 4. compare password
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return res.json({ error: "Wrong password" });
+      return res.json({ error: 'Wrong password' });
     }
     // 5. create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: '7d',
     });
     // 7. send response
     res.json({
@@ -103,7 +103,7 @@ export const updateProfile = async (req, res) => {
     // check password length
     if (password && password.length < 6) {
       return res.json({
-        error: "Password is required and should be min 6 characters long",
+        error: 'Password is required and should be min 6 characters long',
       });
     }
     // hash the password
@@ -129,8 +129,8 @@ export const updateProfile = async (req, res) => {
 export const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ buyer: req.user._id })
-      .populate("products", "-photo")
-      .populate("buyer", "name");
+      .populate('products', '-photo')
+      .populate('buyer', 'name');
     res.json(orders);
   } catch (err) {
     console.log(err);
@@ -140,11 +140,23 @@ export const getOrders = async (req, res) => {
 export const allOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
-      .populate("products", "-photo")
-      .populate("buyer", "name")
-      .sort({ createdAt: "-1" });
+      .populate('products', '-photo')
+      .populate('buyer', 'name')
+      .sort({ createdAt: '-1' });
     res.json(orders);
   } catch (err) {
     console.log(err);
   }
 };
+
+// export const forgotPassword = async (req, res) => {
+//   try{
+//     const userExist = await User.findOne({ req.body.email })
+//     if(!userExist){
+//       return res.status(400).json({success: true, message: 'This email is not exist'})
+//     }
+//     const code =
+//   }catch(err){
+
+//   }
+// }
