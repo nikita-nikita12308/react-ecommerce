@@ -30,6 +30,8 @@ const userSchema = new Schema(
       default: 0,
     },
     comments: [{ type: ObjectId, ref: 'Comment' }],
+    passwordResetTooken: String,
+    passwordResetTokenExpires: Date,
   },
   { timestamps: true }
 );

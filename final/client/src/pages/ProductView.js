@@ -65,20 +65,26 @@ export default function ProductView() {
     }
   };
   const handleAddComment = async () => {
-    const { commentData } = await axios.post(
-      `/product/comment/${product._id}`,
-      {
-        text: newComment,
-        rating: newRating,
+    try {
+      const { commentData } = await axios.post(
+        `/product/comment/${product._id}`,
+        {
+          text: newComment,
+          rating: newRating,
+        }
+      );
+      if (commentData?.error) {
+        toast.error(commentData.error);
+      } else {
+        toast.success(`Comment is created`);
+        loadComments(product._id);
       }
-    );
-    if (commentData?.error) {
-      toast.error(commentData.error);
-    } else {
-      toast.success(`Comment is created`);
+      setNewComment('');
+      setNewRating(0);
+    } catch (err) {
+      console.error(err.response.data.error);
+      toast.error(err.response.data.error);
     }
-    setNewComment('');
-    setNewRating(0);
   };
 
   const handleReply = async (commentId, replyText) => {

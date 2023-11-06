@@ -66,3 +66,23 @@ export const listComments = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const getAverageRating = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const comments = await Comment.find({ product: productId });
+    const totalRating = comments.length;
+    if (totalRating > 0) {
+      const sumOfRating = comments.reduce(
+        (acc, comment) => acc + comment.rating,
+        0
+      );
+      const averageRating = sumOfRating / totalRating;
+      res.status(200).json({ success: true, averageRating, totalRating });
+    } else {
+      res.status(200).json({ success: true, averageRating: 0, totalRating: 0 });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

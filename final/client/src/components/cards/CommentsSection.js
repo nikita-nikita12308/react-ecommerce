@@ -22,7 +22,7 @@ const Comment = ({ comment, onReply }) => {
   const renderRating = () => {
     const stars = [];
     for (let i = 0; i < comment.rating; i++) {
-      stars.push(<FaStar key={i} />);
+      stars.push(<FaStar style={{ color: '#FFD700' }} key={i} />);
     }
     return stars;
   };
@@ -44,13 +44,14 @@ const Comment = ({ comment, onReply }) => {
           </button>
         )}
 
-        <p>Користувач: {comment.user.name}</p>
-        <p>Текст: {comment.text}</p>
+        <p>
+          <strong>{comment.user.name} </strong> - {formattedDateTime}
+        </p>
+        <p>{comment.text}</p>
         <div>
           <span>Рейтинг: </span>
           {renderRating()}
         </div>
-        <p>Створений: {formattedDateTime}</p>
         {isReplying && (
           <div className="mb-3">
             <textarea

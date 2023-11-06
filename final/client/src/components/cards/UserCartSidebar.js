@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DropIn from 'braintree-web-drop-in-react';
 import toast from 'react-hot-toast';
+import CoinbaseCommerceButton from 'react-coinbase-commerce';
+import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 
 export default function UserCartSidebar() {
   // context
@@ -97,16 +99,108 @@ export default function UserCartSidebar() {
           >
             Update address
           </button>
+          <form>
+            <div className="mb-3">
+              <label htmlFor="fullName" className="form-label">
+                Ім'я Прізвище
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="fullName"
+                placeholder="Ваше Ім'я Прізвище"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="city" className="form-label">
+                Місто / Село
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="city"
+                placeholder="Ваше Місто / Село"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="region" className="form-label">
+                Область / Округ
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="region"
+                placeholder="Ваша Область / Округ"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="postNumber" className="form-label">
+                Номер відділення Нової Пошти
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="postNumber"
+                placeholder="Номер відділення Нової Пошти"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phone" className="form-label">
+                Телефон
+              </label>
+              <input
+                type="tel"
+                className="form-control"
+                id="phone"
+                placeholder="Ваш номер телефону"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <p>Виберіть спосіб оплати:</p>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="paymentMethod"
+                  id="cashOnDelivery"
+                  value="cash"
+                />
+                <label className="form-check-label" htmlFor="cashOnDelivery">
+                  Оплата готівкою або карткою при отриманні у відділенні Нової
+                  пошти
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="paymentMethod"
+                  id="prepaid"
+                  value="prepaid"
+                />
+                <label className="form-check-label" htmlFor="prepaid">
+                  Передплата на карту Приватбанку
+                </label>
+              </div>
+            </div>
+          </form>
         </>
       ) : (
         <div className="mb-3">
           {auth?.token ? (
-            <button
-              className="btn btn-outline-warning"
-              onClick={() => navigate('/dashboard/user/profile')}
-            >
-              Add delivery address
-            </button>
+            <>
+              <button
+                className="btn btn-outline-warning"
+                onClick={() => navigate('/dashboard/user/profile')}
+              >
+                Додати адрес доставки
+              </button>
+            </>
           ) : (
             <button
               className="btn btn-outline-danger mt-3"
@@ -126,21 +220,12 @@ export default function UserCartSidebar() {
           ''
         ) : (
           <>
-            <DropIn
-              options={{
-                authorization: clientToken,
-                paypal: {
-                  flow: 'vault',
-                },
-              }}
-              onInstance={(instance) => setInstance(instance)}
-            />
             <button
               onClick={handleBuy}
               className="btn btn-primary col-12 mt-2"
-              disabled={!auth?.user?.address || !instance || loading}
+              disabled={!auth?.user?.address}
             >
-              {loading ? 'Processing...' : 'Buy'}
+              Підтвердити Завмовлення
             </button>
           </>
         )}
