@@ -3,7 +3,7 @@ import { hashPassword, comparePassword } from '../helpers/auth.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Order from '../models/order.js';
-
+import crypto from 'crypto';
 dotenv.config();
 
 export const register = async (req, res) => {
@@ -158,7 +158,34 @@ export const forgotPassword = async (req, res) => {
         .json({ success: false, message: 'This email is not exist' });
     }
     const token = await user.createPasswordResetToken();
-    res.status(200).json({ success: true, token: token });
+    await user.save({ validateBeforeSave: false });
+    res.status(200).json({ success: true, token: token, user: user });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+    if (!user)
+      res
+        .status(400)
+        .json({ success: false, message: 'Invalid or expired token' });
+    const hashedPassword = await hashPassword(req.body.password);
+    user.password = hashedPassword;
+    user.passwordResetToken = null;
+    user.passwordResetTokenExpires = null;
+    await user.save();
+    res.status(200).json({ success: true, newPassword: user.password });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

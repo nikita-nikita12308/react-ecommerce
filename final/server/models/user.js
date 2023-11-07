@@ -31,7 +31,7 @@ const userSchema = new Schema(
       default: 0,
     },
     comments: [{ type: ObjectId, ref: 'Comment' }],
-    passwordResetTooken: String,
+    passwordResetToken: String,
     passwordResetTokenExpires: Date,
   },
   { timestamps: true }
@@ -44,7 +44,7 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest('hex');
   console.log(resetToken, this.passwordResetToken);
-  this.passwordResetTokenExpires = Date.now() * 10 * 60 * 1000;
+  this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
 

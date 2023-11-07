@@ -13,6 +13,7 @@ import {
   getOrders,
   allOrders,
   forgotPassword,
+  resetPassword,
 } from '../controllers/auth.js';
 
 router.post('/register', register);
@@ -35,5 +36,5 @@ router.get('/all-orders', requireSignin, isAdmin, allOrders);
 
 //Password
 router.post('/forgot-password', forgotPassword);
-
+router.post('/reset-password/:token', resetPassword);
 export default router;
