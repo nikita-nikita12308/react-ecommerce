@@ -3,8 +3,19 @@ import { hashPassword, comparePassword } from '../helpers/auth.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Order from '../models/order.js';
-
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 dotenv.config();
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465, // Usually 587 for secure or 25 for unencrypted
+  secure: true, // Use true for 465, false for other ports
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 
 export const register = async (req, res) => {
   try {
@@ -149,14 +160,63 @@ export const allOrders = async (req, res) => {
   }
 };
 
-// export const forgotPassword = async (req, res) => {
-//   try{
-//     const userExist = await User.findOne({ req.body.email })
-//     if(!userExist){
-//       return res.status(400).json({success: true, message: 'This email is not exist'})
-//     }
-//     const code =
-//   }catch(err){
+export const forgotPassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'This email is not exist' });
+    }
+    const token = await user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
 
-//   }
-// }
+    const mailOptions = {
+      from: 'ndatskiy@gmail.com',
+      to: user.email,
+      subject: 'Subject of the Email',
+      text: 'This is the text body of the email',
+      html: `<p>This is the HTML body of the email. Token: ${token}</p>`,
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    res
+      .status(200)
+      .json({ success: true, token: token, message: 'Email has been sent' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+    if (!user)
+      res
+        .status(400)
+        .json({ success: false, message: 'Invalid or expired token' });
+    const hashedPassword = await hashPassword(req.body.password);
+    user.password = hashedPassword;
+    user.passwordResetToken = null;
+    user.passwordResetTokenExpires = null;
+    await user.save();
+    res.status(200).json({ success: true, newPassword: user.password });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
