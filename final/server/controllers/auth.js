@@ -4,7 +4,18 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Order from '../models/order.js';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 dotenv.config();
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465, // Usually 587 for secure or 25 for unencrypted
+  secure: true, // Use true for 465, false for other ports
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 
 export const register = async (req, res) => {
   try {
@@ -159,7 +170,26 @@ export const forgotPassword = async (req, res) => {
     }
     const token = await user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
-    res.status(200).json({ success: true, token: token, user: user });
+
+    const mailOptions = {
+      from: 'ndatskiy@gmail.com',
+      to: user.email,
+      subject: 'Subject of the Email',
+      text: 'This is the text body of the email',
+      html: `<p>This is the HTML body of the email. Token: ${token}</p>`,
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    res
+      .status(200)
+      .json({ success: true, token: token, message: 'Email has been sent' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
