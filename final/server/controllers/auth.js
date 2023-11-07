@@ -149,14 +149,17 @@ export const allOrders = async (req, res) => {
   }
 };
 
-// export const forgotPassword = async (req, res) => {
-//   try{
-//     const userExist = await User.findOne({ req.body.email })
-//     if(!userExist){
-//       return res.status(400).json({success: true, message: 'This email is not exist'})
-//     }
-//     const code =
-//   }catch(err){
-
-//   }
-// }
+export const forgotPassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'This email is not exist' });
+    }
+    const token = await user.createPasswordResetToken();
+    res.status(200).json({ success: true, token: token });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
