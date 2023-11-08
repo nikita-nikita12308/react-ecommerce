@@ -174,9 +174,11 @@ export const forgotPassword = async (req, res) => {
     const mailOptions = {
       from: 'ndatskiy@gmail.com',
       to: user.email,
-      subject: 'Subject of the Email',
+      subject: 'Password Reset',
       text: 'This is the text body of the email',
-      html: `<p>This is the HTML body of the email. Token: ${token}</p>`,
+      html: `<p>Your Reset password token click the link to reset password. "${
+        req.protocol
+      }://${req.get('host')}/api/reset-password/${token}"</p>`,
     };
 
     // Send the email

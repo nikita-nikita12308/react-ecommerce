@@ -1,5 +1,6 @@
 import Comment from '../models/comment.js';
-import user from '../models/user.js';
+import User from '../models/user.js';
+import { deleteOne, updateOne } from './handleFactory.js';
 
 export const createComment = async (req, res) => {
   try {
@@ -21,6 +22,9 @@ export const createComment = async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+
+export const deleteComment = deleteOne(Comment);
+export const updateComment = updateOne(Comment);
 
 export const createReply = async (req, res) => {
   try {

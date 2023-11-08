@@ -28,6 +28,8 @@ import {
   createReply,
   listComments,
   getAverageRating,
+  deleteComment,
+  updateComment,
 } from '../controllers/comment.js';
 
 router.post('/product', requireSignin, isAdmin, formidable(), create);
@@ -48,7 +50,11 @@ router.put('/order-status/:orderId', requireSignin, isAdmin, orderStatus);
 
 // Comments
 router.post('/product/comment/:productId', requireSignin, createComment);
+router.delete('/comment/:id', requireSignin, deleteComment);
+router.patch('/comment/:id', requireSignin, updateComment);
+
 router.post('/comment/:commentId/replies', requireSignin, createReply);
 router.get('/product/comment/:productId', listComments);
 router.get('/product/average-rating/:productId', getAverageRating);
+
 export default router;
