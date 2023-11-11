@@ -75,15 +75,7 @@ export default function UserCartSidebar() {
   const handleOrderForm = () => {};
   return (
     <div className="col-md-4 mb-5">
-      <h4>
-        Your cart summary{' '}
-        <button
-          onClick={handleUpdateCart}
-          className="btn btn-outline-primary btn-sm"
-        >
-          Update
-        </button>
-      </h4>
+      <h4>Your cart summary </h4>
       Total / Address / Payments
       <hr />
       <h6>Total: {handleUpdateCart()}</h6>
@@ -121,7 +113,7 @@ export default function UserCartSidebar() {
                 })
               }
             >
-              Login to checkout
+              Увійдіть щоб замовити
             </button>
           )}
         </div>
@@ -132,22 +124,17 @@ export default function UserCartSidebar() {
         ) : (
           <>
             <button
-              onClick={handleBuy}
               className="btn btn-primary col-12 mt-2"
               disabled={!auth?.user?.address}
             >
-              Підтвердити Завмовлення
+              <NavLink
+                className="nav-link"
+                aria-current="page"
+                to="/order-form"
+              >
+                Перейти до оформлення
+              </NavLink>
             </button>
-            <button
-              onClick={handleOrderForm}
-              className="btn btn-primary col-12 mt-2"
-              disabled={!auth?.user?.address}
-            >
-              Підтвердити Завмовлення
-            </button>
-            <NavLink className="nav-link" aria-current="page" to="/order-form">
-              Форма
-            </NavLink>
           </>
         )}
       </div>

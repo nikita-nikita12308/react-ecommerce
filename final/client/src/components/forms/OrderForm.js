@@ -101,7 +101,7 @@ function OrderForm() {
                 Номер відділення Нової Пошти
               </label>
               <input
-                type="number"
+                type="text"
                 className="form-control"
                 id="postNumber"
                 placeholder="Номер відділення Нової Пошти"
