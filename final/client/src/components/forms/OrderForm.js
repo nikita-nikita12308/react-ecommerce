@@ -101,7 +101,7 @@ function OrderForm() {
                 Номер відділення Нової Пошти
               </label>
               <input
-                type="number"
+                type="text"
                 className="form-control"
                 id="postNumber"
                 placeholder="Номер відділення Нової Пошти"
@@ -123,6 +123,40 @@ function OrderForm() {
                 title="Please enter a valid 10-digit phone number"
                 value={formData.phone}
               />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phone" className="form-label">
+                Пошта
+              </label>
+              <input
+                type="tel"
+                className="form-control"
+                id="phone"
+                name="phone"
+                placeholder="Ваш номер телефону"
+                required
+                pattern="[0-9]{10}"
+                title="Please enter a valid 10-digit phone number"
+                value={formData.phone}
+              />
+            </div>
+            <div className="mb-4">
+              <h5>Ваше замовлення</h5>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Товар</th>
+                    <th scope="col">Проміжний підсумок</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Сир твердий Чеддер x 1</td>
+                    <td>110.00₴</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>Загалом: 110.00₴</p>
             </div>
             <div className="mb-3">
               <p>Виберіть спосіб оплати:</p>

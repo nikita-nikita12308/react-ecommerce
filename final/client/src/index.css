@@ -97,3 +97,17 @@
   background-color: #E6E6FA;
 }
 
+input[type="number"] {
+  /* Reset appearance to show arrows */
+  -moz-appearance: textfield;
+  appearance: textfield;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
