@@ -1,6 +1,6 @@
-import axios from "axios";
-import { useSearch } from "../../context/search";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { useSearch } from '../../context/search';
+import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
   // hooks
@@ -13,7 +13,7 @@ export default function Search() {
       const { data } = await axios.get(`/products/search/${values?.keyword}`);
       // console.log(data);
       setValues({ ...values, results: data });
-      navigate("/search");
+      navigate('/search');
     } catch (err) {
       console.log(err);
     }
@@ -23,18 +23,18 @@ export default function Search() {
     <form className="d-flex" onSubmit={handleSubmit}>
       <input
         type="search"
-        style={{ borderRadius: "0px" }}
+        style={{ borderRadius: '0px' }}
         className="form-control"
-        placeholder="Search"
+        placeholder="Пошук"
         onChange={(e) => setValues({ ...values, keyword: e.target.value })}
         value={values.keyword}
       />
       <button
         className="btn btn-outline-primary"
         type="submit"
-        style={{ borderRadius: "0px" }}
+        style={{ borderRadius: '0px' }}
       >
-        Search
+        Знайти
       </button>
     </form>
   );

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 export default function UserMenu() {
   return (
@@ -8,13 +8,13 @@ export default function UserMenu() {
       <ul className="list-group list-unstyled">
         <li>
           <NavLink className="list-group-item" to="/dashboard/user/profile">
-            Profile
+            Профіль
           </NavLink>
         </li>
 
         <li>
           <NavLink className="list-group-item" to="/dashboard/user/orders">
-            Orders
+            Замовлення
           </NavLink>
         </li>
       </ul>

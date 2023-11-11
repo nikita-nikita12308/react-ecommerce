@@ -112,13 +112,13 @@ export default function Menu() {
                       auth?.user?.role === 1 ? 'admin' : 'user'
                     }`}
                   >
-                    Dashboard
+                    Панель
                   </NavLink>
                 </li>
 
                 <li className="nav-item pointer">
                   <a onClick={logout} className="nav-link">
-                    Logout
+                    Вийти
                   </a>
                 </li>
               </ul>

@@ -6,6 +6,7 @@ const centerFormStyle = {
   display: 'flex',
   justifyContent: 'center',
   minHeight: '100vh',
+  marginTop: '40px',
 };
 
 const headerStyle = {
@@ -50,10 +51,12 @@ function OrderForm() {
         <form className="col-md-6">
           <div style={headerStyle}>
             <h2 className="mb-4">Оформлення замовлення</h2>
-            <a className="navbar-brand" href="/">
-              Головна
-            </a>
-            / Оформлення замовлення
+            <h6>
+              <a className="navbar-brand" href="/">
+                Головна
+              </a>
+              / Оформлення замовлення
+            </h6>
           </div>
 
           <form>
@@ -98,7 +101,7 @@ function OrderForm() {
                 Номер відділення Нової Пошти
               </label>
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 id="postNumber"
                 placeholder="Номер відділення Нової Пошти"
@@ -113,8 +116,12 @@ function OrderForm() {
                 type="tel"
                 className="form-control"
                 id="phone"
+                name="phone"
                 placeholder="Ваш номер телефону"
                 required
+                pattern="[0-9]{10}"
+                title="Please enter a valid 10-digit phone number"
+                value={formData.phone}
               />
             </div>
             <div className="mb-3">
@@ -132,16 +139,30 @@ function OrderForm() {
                   пошти
                 </label>
               </div>
-              <div className="form-check disabled">
+              <div className="form-check">
                 <input
                   className="form-check-input"
                   type="radio"
                   name="paymentMethod"
                   id="prepaid"
                   value="prepaid"
+                  disabled
                 />
                 <label className="form-check-label disabled" htmlFor="prepaid">
                   Передплата на карту Приватбанку
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="paymentMethod"
+                  id="prepaid"
+                  value="prepaid"
+                  disabled
+                />
+                <label className="form-check-label disabled" htmlFor="prepaid">
+                  Оплата криптовалютою
                 </label>
               </div>
             </div>

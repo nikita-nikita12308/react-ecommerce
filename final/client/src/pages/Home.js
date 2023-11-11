@@ -54,7 +54,10 @@ export default function Home() {
 
   return (
     <div>
-      <Jumbotron title="Hello World" sutTitle="Welcome to React E-commerce" />
+      <Jumbotron
+        title="Сирна Насолода"
+        sutTitle="Welcome to React E-commerce"
+      />
       <div className="container-fluid">
         <div className="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
           <div className="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
@@ -121,7 +124,7 @@ export default function Home() {
         <div className="row">
           <div className="col-md-6">
             <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">
-              New Arrivals
+              Нові надходження
             </h2>
             <div className="row">
               {products?.map((p) => (
@@ -133,9 +136,7 @@ export default function Home() {
           </div>
 
           <div className="col-md-6">
-            <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">
-              Best Sellers
-            </h2>
+            <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">Популярні</h2>
             <div className="row">
               {sortedBySold?.map((p) => (
                 <div className="col-md-6" key={p._id}>
