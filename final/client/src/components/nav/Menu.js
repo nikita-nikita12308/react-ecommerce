@@ -1,10 +1,10 @@
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/auth";
-import { useNavigate } from "react-router-dom";
-import Search from "../forms/Search";
-import useCategory from "../../hooks/useCategory";
-import { useCart } from "../../context/cart";
-import { Badge } from "antd";
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/auth';
+import { useNavigate } from 'react-router-dom';
+import Search from '../forms/Search';
+import useCategory from '../../hooks/useCategory';
+import { useCart } from '../../context/cart';
+import { Badge } from 'antd';
 
 export default function Menu() {
   // context
@@ -17,9 +17,9 @@ export default function Menu() {
   // console.log("categories in menu => ", categories);
 
   const logout = () => {
-    setAuth({ ...auth, user: null, token: "" });
-    localStorage.removeItem("auth");
-    navigate("/login");
+    setAuth({ ...auth, user: null, token: '' });
+    localStorage.removeItem('auth');
+    navigate('/login');
   };
 
   return (
@@ -27,13 +27,13 @@ export default function Menu() {
       <ul className="nav d-flex justify-content-between shadow-sm mb-2 sticky-top bg-light">
         <li className="nav-item">
           <NavLink className="nav-link" aria-current="page" to="/">
-            HOME
+            Головна
           </NavLink>
         </li>
 
         <li className="nav-item">
           <NavLink className="nav-link" aria-current="page" to="/shop">
-            SHOP
+            Магазин
           </NavLink>
         </li>
 
@@ -43,16 +43,16 @@ export default function Menu() {
               className="nav-link pointer dropdown-toggle"
               data-bs-toggle="dropdown"
             >
-              CATEGORIES
+              Категорії
             </a>
 
             <ul
               className="dropdown-menu"
-              style={{ height: "300px", overflow: "scroll" }}
+              style={{ height: '300px', overflow: 'scroll' }}
             >
               <li>
                 <NavLink className="nav-link" to="/categories">
-                  All Categories
+                  Всі категорії
                 </NavLink>
               </li>
 
@@ -74,7 +74,7 @@ export default function Menu() {
             showZero={true}
           >
             <NavLink className="nav-link" aria-current="page" to="/cart">
-              CART
+              Кошик
             </NavLink>
           </Badge>
         </li>
@@ -85,12 +85,12 @@ export default function Menu() {
           <>
             <li className="nav-item">
               <NavLink className="nav-link" to="/login">
-                LOGIN
+                Вхід
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/register">
-                REGISTER
+                Реєстрація
               </NavLink>
             </li>
           </>
@@ -109,16 +109,16 @@ export default function Menu() {
                   <NavLink
                     className="nav-link"
                     to={`/dashboard/${
-                      auth?.user?.role === 1 ? "admin" : "user"
+                      auth?.user?.role === 1 ? 'admin' : 'user'
                     }`}
                   >
-                    Dashboard
+                    Панель
                   </NavLink>
                 </li>
 
                 <li className="nav-item pointer">
                   <a onClick={logout} className="nav-link">
-                    Logout
+                    Вийти
                   </a>
                 </li>
               </ul>

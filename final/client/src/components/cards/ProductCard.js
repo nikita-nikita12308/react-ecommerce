@@ -72,6 +72,7 @@ export default function ProductCard({ p }) {
 
       <div className="card-body">
         <h5>{p?.name}</h5>
+        <h6>₴{p?.price} за 100 грам</h6>
         <p className="card-text">{p?.description?.substring(0, 60)}...</p>
       </div>
 
@@ -81,7 +82,7 @@ export default function ProductCard({ p }) {
           style={{ borderBottomLeftRadius: '5px' }}
           onClick={() => navigate(`/product/${p.slug}`)}
         >
-          View Product
+          Детальніше
         </button>
 
         <button
@@ -93,7 +94,7 @@ export default function ProductCard({ p }) {
             toast.success('Added to cart');
           }}
         >
-          Add to Cart
+          Додати в кошик
         </button>
       </div>
 
