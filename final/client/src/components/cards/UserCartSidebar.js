@@ -74,22 +74,22 @@ export default function UserCartSidebar() {
   };
   return (
     <div className="col-md-4 mb-5">
-      <h4>Your cart summary </h4>
-      Total / Address / Payments
+      <h4>Підсумок вашого кошика </h4>
+      Всього / Адреса / Оформлення
       <hr />
-      <h6>Total: {handleUpdateCart()}</h6>
+      <h6>Всього: {handleUpdateCart()}</h6>
       {auth?.user?.address ? (
         <>
           <div className="mb-3">
             <hr />
-            <h4>Delivery address:</h4>
+            <h4>Адрес доставки:</h4>
             <h5>{auth?.user?.address}</h5>
           </div>
           <button
             className="btn btn-outline-warning"
             onClick={() => navigate('/dashboard/user/profile')}
           >
-            Update address
+            Оновити адрес
           </button>
         </>
       ) : (
