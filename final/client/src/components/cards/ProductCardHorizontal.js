@@ -1,16 +1,17 @@
 import moment from 'moment';
+import 'moment/locale/uk'; // Import Ukrainian locale
 import { useCart } from '../../context/cart';
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+moment.locale('uk');
 export default function ProductCardHorizontal({ p, remove = true }) {
   // context
   const [cart, setCart] = useCart();
-  const [quantity, setQuantity] = useState(p.cart_quantity || 1);
+  const [quantity, setQuantity] = useState(p.cart_quantity);
   let newPrice = p.price * quantity;
+
   const updateQuantity = (newQuantity) => {
     if (newQuantity > p.quantity) return;
     const updatedQuantity = newQuantity < 1 ? 1 : newQuantity;
-    setQuantity(updatedQuantity);
 
     const updatedCart = cart.map((item) => {
       if (item._id === p._id) {
@@ -20,6 +21,7 @@ export default function ProductCardHorizontal({ p, remove = true }) {
     });
 
     setCart(updatedCart);
+    setQuantity(updatedQuantity);
   };
   const removeFromCart = (productId) => {
     let myCart = [...cart];
@@ -28,7 +30,14 @@ export default function ProductCardHorizontal({ p, remove = true }) {
     setCart(myCart);
     localStorage.setItem('cart', JSON.stringify(myCart));
   };
-
+  const handleIncrement = () => {
+    updateQuantity(quantity + 1);
+  };
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      updateQuantity(quantity - 1);
+    }
+  };
   return (
     <div
       className="card mb-3"
@@ -61,13 +70,19 @@ export default function ProductCardHorizontal({ p, remove = true }) {
               0,
               50
             )}..`}</p>
-            Кількість:
+            Кількість :
+            <button className="input_number" onClick={handleDecrement}>
+              -
+            </button>
             <input
               className="input_number"
               type="number"
               value={quantity}
               onChange={(e) => updateQuantity(e.target.value)}
             />
+            <button className="input_number" onClick={handleIncrement}>
+              +
+            </button>
           </div>
         </div>
 

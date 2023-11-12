@@ -1,7 +1,6 @@
-// Import necessary React libraries
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useCart } from '../../context/cart';
 
-// Additional CSS for centering the form
 const centerFormStyle = {
   display: 'flex',
   justifyContent: 'center',
@@ -14,9 +13,9 @@ const headerStyle = {
   marginRight: '20px',
 };
 
-// Functional component for the form page
 function OrderForm() {
-  // State variables to store form data
+  const [cart, setCart] = useCart();
+  const [total, setTotal] = useState(0);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -27,6 +26,18 @@ function OrderForm() {
     email: '',
     orderNotes: '',
   });
+  useEffect(() => {
+    const calculateTotal = () => {
+      let newTotal = 0;
+      cart.forEach((item) => {
+        newTotal += item.price * (item.cart_quantity || 1);
+      });
+      return newTotal;
+    };
+
+    const newTotal = calculateTotal();
+    setTotal(newTotal);
+  }, [cart]);
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -150,13 +161,22 @@ function OrderForm() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Сир твердий Чеддер x 1</td>
-                    <td>110.00₴</td>
-                  </tr>
+                  {cart.map((item) => (
+                    <tr key={item._id}>
+                      <td>
+                        {item.name} x {item.cart_quantity}
+                      </td>
+                      <td>
+                        {(item.price * item.cart_quantity).toLocaleString(
+                          'uk-UA',
+                          { style: 'currency', currency: 'UAH' }
+                        )}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-              <p>Загалом: 110.00₴</p>
+              <p>Загалом: {total} грн</p>
             </div>
             <div className="mb-3">
               <p>Виберіть спосіб оплати:</p>

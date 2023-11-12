@@ -72,7 +72,6 @@ export default function UserCartSidebar() {
       setLoading(false);
     }
   };
-  const handleOrderForm = () => {};
   return (
     <div className="col-md-4 mb-5">
       <h4>Your cart summary </h4>
@@ -131,6 +130,7 @@ export default function UserCartSidebar() {
                 className="nav-link"
                 aria-current="page"
                 to="/order-form"
+                cart={cart}
               >
                 Перейти до оформлення
               </NavLink>
