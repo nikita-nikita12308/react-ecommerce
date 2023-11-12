@@ -17,15 +17,11 @@ function OrderForm() {
   const [cart, setCart] = useCart();
   const [total, setTotal] = useState(0);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    street: '',
-    apartment: '',
     city: '',
     phone: '',
     email: '',
-    orderNotes: '',
   });
+
   useEffect(() => {
     const calculateTotal = () => {
       let newTotal = 0;
@@ -52,14 +48,14 @@ function OrderForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add logic to handle form submission (e.g., send data to the server)
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', JSON.stringify(formData));
   };
 
   // JSX for the form page with Bootstrap styling
   return (
     <div>
       <div style={centerFormStyle}>
-        <form className="col-md-6">
+        <form className="col-md-6" onSubmit={handleSubmit}>
           <div style={headerStyle}>
             <h2 className="mb-4">Оформлення замовлення</h2>
             <h6>
@@ -70,7 +66,7 @@ function OrderForm() {
             </h6>
           </div>
 
-          <form>
+          <div>
             <div className="mb-3">
               <label htmlFor="fullName" className="form-label">
                 Ім'я Прізвище
@@ -81,6 +77,8 @@ function OrderForm() {
                 id="fullName"
                 placeholder="Ваше Ім'я Прізвище"
                 required
+                onChange={handleInputChange}
+                name="fullName"
               />
             </div>
             <div className="mb-3">
@@ -93,6 +91,8 @@ function OrderForm() {
                 id="city"
                 placeholder="Ваше Місто / Село"
                 required
+                onChange={handleInputChange}
+                name="city"
               />
             </div>
             <div className="mb-3">
@@ -105,6 +105,8 @@ function OrderForm() {
                 id="region"
                 placeholder="Ваша Область / Округ"
                 required
+                onChange={handleInputChange}
+                name="region"
               />
             </div>
             <div className="mb-3">
@@ -117,6 +119,8 @@ function OrderForm() {
                 id="postNumber"
                 placeholder="Номер відділення Нової Пошти"
                 required
+                onChange={handleInputChange}
+                name="postNumber"
               />
             </div>
             <div className="mb-3">
@@ -133,22 +137,22 @@ function OrderForm() {
                 pattern="[0-9]{10}"
                 title="Please enter a valid 10-digit phone number"
                 value={formData.phone}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="phone" className="form-label">
+              <label htmlFor="email" className="form-label">
                 Пошта
               </label>
               <input
-                type="tel"
+                type="email"
                 className="form-control"
-                id="phone"
-                name="phone"
-                placeholder="Ваш номер телефону"
+                id="email"
+                name="email"
+                placeholder="Ваша електронна пошта"
                 required
-                pattern="[0-9]{10}"
-                title="Please enter a valid 10-digit phone number"
-                value={formData.phone}
+                value={formData.email}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-4">
@@ -176,7 +180,13 @@ function OrderForm() {
                   ))}
                 </tbody>
               </table>
-              <p>Загалом: {total} грн</p>
+              <p>
+                Загалом:{' '}
+                {total.toLocaleString('uk-UA', {
+                  style: 'currency',
+                  currency: 'UAH',
+                })}
+              </p>
             </div>
             <div className="mb-3">
               <p>Виберіть спосіб оплати:</p>
@@ -187,40 +197,15 @@ function OrderForm() {
                   name="paymentMethod"
                   id="cashOnDelivery"
                   value="cash"
+                  onChange={handleInputChange}
                 />
                 <label className="form-check-label" htmlFor="cashOnDelivery">
                   Оплата готівкою або карткою при отриманні у відділенні Нової
                   пошти
                 </label>
               </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="paymentMethod"
-                  id="prepaid"
-                  value="prepaid"
-                  disabled
-                />
-                <label className="form-check-label disabled" htmlFor="prepaid">
-                  Передплата на карту Приватбанку
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="paymentMethod"
-                  id="prepaid"
-                  value="prepaid"
-                  disabled
-                />
-                <label className="form-check-label disabled" htmlFor="prepaid">
-                  Оплата криптовалютою
-                </label>
-              </div>
             </div>
-          </form>
+          </div>
           <button type="submit" className="btn btn-primary">
             Підтвердити замовлення
           </button>
