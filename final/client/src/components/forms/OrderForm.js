@@ -39,7 +39,6 @@ function OrderForm() {
     setTotal(newTotal);
   }, [cart]);
 
-  console.log('This is cart' + JSON.stringify(cart));
   // Function to handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
