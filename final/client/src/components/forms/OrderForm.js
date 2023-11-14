@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/cart';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const centerFormStyle = {
   display: 'flex',
@@ -15,6 +18,7 @@ const headerStyle = {
 
 function OrderForm() {
   const [cart, setCart] = useCart();
+  const navigate = useNavigate();
   const [total, setTotal] = useState(0);
   const [formData, setFormData] = useState({
     city: '',
@@ -35,7 +39,6 @@ function OrderForm() {
     setTotal(newTotal);
   }, [cart]);
 
-  // Function to handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -45,10 +48,38 @@ function OrderForm() {
   };
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to handle form submission (e.g., send data to the server)
+    const cartOrder = cart.map((el) => ({
+      product: el._id,
+      name: el.name,
+      quantity: el.cart_quantity,
+    }));
+    try {
+      const { orderData } = await axios.post(`/order`, {
+        cart: cartOrder,
+        city: formData.city,
+        phone: formData.phone,
+        fullName: formData.fullName,
+        region: formData.region,
+        postNumber: formData.postNumber,
+        paymentMethod: formData.paymentMethod,
+        cartTotal: total,
+      });
+      if (orderData?.error) {
+        toast.error(orderData.error);
+      } else {
+        toast.success(`Order is created`);
+        navigate('/dashboard/user/orders');
+        setCart([]);
+        localStorage.removeItem('cart');
+      }
+    } catch (err) {
+      console.error(err.response.data.error);
+      toast.error(err.response.data.error);
+    }
     console.log('Form submitted:', JSON.stringify(formData));
+    console.log('cart: ' + JSON.stringify(cartOrder) + ' Cart Total: ' + total);
   };
 
   // JSX for the form page with Bootstrap styling
@@ -140,21 +171,6 @@ function OrderForm() {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Пошта
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                name="email"
-                placeholder="Ваша електронна пошта"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-            </div>
             <div className="mb-4">
               <h5>Ваше замовлення</h5>
               <table className="table">
@@ -196,7 +212,7 @@ function OrderForm() {
                   type="radio"
                   name="paymentMethod"
                   id="cashOnDelivery"
-                  value="cash"
+                  value="Готівка"
                   onChange={handleInputChange}
                 />
                 <label className="form-check-label" htmlFor="cashOnDelivery">

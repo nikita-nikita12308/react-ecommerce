@@ -248,6 +248,36 @@ export const getToken = async (req, res) => {
   }
 };
 
+export const createOrder = async (req, res) => {
+  try {
+    const cart = req.body.cart;
+    const user = req.user._id;
+    const {
+      city,
+      phone,
+      fullName,
+      region,
+      postNumber,
+      paymentMethod,
+      cartTotal,
+    } = req.body;
+    const createdOrder = await Order.create({
+      products: cart,
+      city,
+      phone,
+      fullName,
+      region,
+      postNumber,
+      paymentMethod,
+      cartTotal,
+      buyer: user,
+    });
+    res.status(201).json({ success: true, data: createdOrder });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 export const processPayment = async (req, res) => {
   try {
     // console.log(req.body);

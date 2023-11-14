@@ -5,7 +5,12 @@ const { ObjectId } = mongoose.Schema;
 
 const orderSchema = new Schema(
   {
-    products: [{ type: ObjectId, ref: 'Product' }],
+    products: [
+      {
+        product: { type: ObjectId, ref: 'Product' },
+        quantity: Number,
+      },
+    ],
     payment: {},
     buyer: { type: ObjectId, ref: 'User' },
     status: {
@@ -19,11 +24,26 @@ const orderSchema = new Schema(
         'Cancelled',
       ],
     },
-    fullName: String,
-    city: String,
-    region: String,
-    phone: String,
-    postNumber: Number,
+    fullName: {
+      type: String,
+      required: [true, "Замовлення повинно мати ім'я клієнта"],
+    },
+    city: {
+      type: String,
+      required: [true, 'Замовлення повинно мати місто доставки'],
+    },
+    region: {
+      type: String,
+      required: [true, 'Замовлення повинно мати регіон доставки'],
+    },
+    phone: {
+      type: String,
+      required: [true, 'Клієнт має мати телефон'],
+    },
+    postNumber: {
+      type: String,
+      required: [true, 'Необхідний номер віділення пошти'],
+    },
     paymentMethod: {
       type: String,
       default: 'Готівка',
