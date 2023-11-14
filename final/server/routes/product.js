@@ -21,6 +21,7 @@ import {
   getToken,
   processPayment,
   orderStatus,
+  createOrder,
 } from '../controllers/product.js';
 
 import {
@@ -57,4 +58,6 @@ router.post('/comment/:commentId/replies', requireSignin, createReply);
 router.get('/product/comment/:productId', listComments);
 router.get('/product/average-rating/:productId', getAverageRating);
 
+//Order
+router.post('/order', requireSignin, createOrder);
 export default router;
