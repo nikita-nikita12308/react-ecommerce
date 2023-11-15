@@ -140,7 +140,7 @@ export const updateProfile = async (req, res) => {
 export const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ buyer: req.user._id })
-      .populate('products', '-photo')
+      .populate('products.product', '-photo')
       .populate('buyer', 'name');
     res.json(orders);
   } catch (err) {

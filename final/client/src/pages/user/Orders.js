@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../context/auth";
-import Jumbotron from "../../components/cards/Jumbotron";
-import UserMenu from "../../components/nav/UserMenu";
-import axios from "axios";
-import moment from "moment";
-import ProductCardHorizontal from "../../components/cards/ProductCardHorizontal";
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/auth';
+import Jumbotron from '../../components/cards/Jumbotron';
+import UserMenu from '../../components/nav/UserMenu';
+import axios from 'axios';
+import moment from 'moment';
+import OrderProductCardHorizontal from '../../components/cards/OrderProductCardHorizontal';
 
 export default function UserOrders() {
   // context
@@ -18,7 +18,7 @@ export default function UserOrders() {
 
   const getOrders = async () => {
     try {
-      const { data } = await axios.get("/orders");
+      const { data } = await axios.get('/orders');
       setOrders(data);
     } catch (err) {
       console.log(err);
@@ -60,7 +60,11 @@ export default function UserOrders() {
                         <td>{o?.status}</td>
                         <td>{o?.buyer?.name}</td>
                         <td>{moment(o?.createdAt).fromNow()}</td>
-                        <td>{o?.payment?.success ? "Success" : "Failed"}</td>
+                        <td>
+                          {o?.payment?.success ? 'Success' : 'Failed'}
+                          {' - '}
+                          {o?.cartTotal} грн
+                        </td>
                         <td>{o?.products?.length} products</td>
                       </tr>
                     </tbody>
@@ -69,7 +73,12 @@ export default function UserOrders() {
                   <div className="container">
                     <div className="row m-2">
                       {o?.products?.map((p, i) => (
-                        <ProductCardHorizontal key={i} p={p} remove={false} />
+                        <OrderProductCardHorizontal
+                          key={i}
+                          p={p}
+                          total={o.cartTotal}
+                          remove={false}
+                        />
                       ))}
                     </div>
                   </div>
