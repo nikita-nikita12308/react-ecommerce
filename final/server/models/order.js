@@ -49,6 +49,10 @@ const orderSchema = new Schema(
       default: 'Готівка',
       enum: ['Готівка', 'Передплата', 'Криптовалюта'],
     },
+    cartTotal: {
+      type: Number,
+      required: [true, 'Необхідна сума замовлення'],
+    },
   },
   { timestamps: true }
 );
