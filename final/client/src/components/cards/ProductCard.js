@@ -1,6 +1,6 @@
 import { Badge } from 'antd';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../../context/cart';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -39,7 +39,7 @@ export default function ProductCard({ p }) {
 
     return stars;
   };
-
+  const isInCart = cart.some((product) => product._id === p._id);
   const stars = renderStarRating(averageRating);
   const totalRatings = `(${totalRating})`;
   return (
@@ -85,21 +85,29 @@ export default function ProductCard({ p }) {
           Детальніше
         </button>
 
-        <button
-          className="btn btn-outline-primary col card-button"
-          style={{ borderBottomRightRadius: '5px' }}
-          onClick={() => {
-            const updatedProduct = { ...p, cart_quantity: 1 };
-            setCart([...cart, updatedProduct]);
-            localStorage.setItem(
-              'cart',
-              JSON.stringify([...cart, updatedProduct])
-            );
-            toast.success('Added to cart');
-          }}
-        >
-          Додати в кошик
-        </button>
+        {isInCart ? (
+          // Render a link to the cart if the product is in the cart
+          <Link to="/cart" className="btn btn-outline-warning col card-button">
+            Перейти в кошик
+          </Link>
+        ) : (
+          // Render the "Додати в кошик" button if the product is not in the cart
+          <button
+            className="btn btn-outline-primary col card-button"
+            style={{ borderBottomRightRadius: '5px' }}
+            onClick={() => {
+              const updatedProduct = { ...p, cart_quantity: 1 };
+              setCart([...cart, updatedProduct]);
+              localStorage.setItem(
+                'cart',
+                JSON.stringify([...cart, updatedProduct])
+              );
+              toast.success('Added to cart');
+            }}
+          >
+            Замовити
+          </button>
+        )}
       </div>
 
       {/* <p>{moment(p.createdAt).fromNow()}</p>

@@ -9,37 +9,6 @@ export default function ProductCardHorizontal({ p, remove = true, total }) {
   const [quantity, setQuantity] = useState(p.product.cart_quantity);
   let newPrice = p.product.price * quantity;
 
-  const updateQuantity = (newQuantity) => {
-    if (newQuantity > p.product.quantity) return;
-    const updatedQuantity = newQuantity < 1 ? 1 : newQuantity;
-
-    const updatedCart = cart.map((item) => {
-      if (item._id === p._id) {
-        return { ...item, cart_quantity: updatedQuantity };
-      }
-      return item;
-    });
-
-    setCart(updatedCart);
-    setQuantity(updatedQuantity);
-  };
-  const removeFromCart = (productId) => {
-    let myCart = [...cart];
-    let index = myCart.findIndex((item) => item._id === productId);
-    myCart.splice(index, 1);
-    setCart(myCart);
-    localStorage.setItem('cart', JSON.stringify(myCart));
-  };
-  const handleIncrement = () => {
-    updateQuantity(quantity + 1);
-  };
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      updateQuantity(quantity - 1);
-    }
-  };
-
-  console.log(JSON.stringify(p));
   return (
     <div
       className="card mb-3"
