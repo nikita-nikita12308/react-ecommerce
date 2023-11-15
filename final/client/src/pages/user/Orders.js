@@ -24,7 +24,9 @@ export default function UserOrders() {
       console.log(err);
     }
   };
-
+  const sortedOrders = [...orders].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
   return (
     <>
       <Jumbotron title={`Hello ${auth?.user?.name}`} subTitle="Dashboard" />
@@ -37,7 +39,7 @@ export default function UserOrders() {
           <div className="col-md-9">
             <div className="p-3 mt-2 mb-2 h4 bg-light">Orders</div>
 
-            {orders?.map((o, i) => {
+            {sortedOrders?.map((o, i) => {
               return (
                 <div
                   key={o._id}

@@ -60,7 +60,13 @@ export default function ProductCardHorizontal({ p, remove = true }) {
         <div className="col-md-8">
           <div className="card-body">
             <h5 className="card-title">
-              {p.name}{' '}
+              {p.name}
+              {' - '}
+              {p.price.toLocaleString('uk-UA', {
+                style: 'currency',
+                currency: 'UAH',
+              })}
+              {'. Всього: '}
               {newPrice.toLocaleString('uk-UA', {
                 style: 'currency',
                 currency: 'UAH',
