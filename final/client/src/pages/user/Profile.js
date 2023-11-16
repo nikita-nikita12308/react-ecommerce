@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "../../context/auth";
-import Jumbotron from "../../components/cards/Jumbotron";
-import UserMenu from "../../components/nav/UserMenu";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/auth';
+import Jumbotron from '../../components/cards/Jumbotron';
+import UserMenu from '../../components/nav/UserMenu';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function UserProfile() {
   // context
   const [auth, setAuth] = useAuth();
   // state
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     if (auth?.user) {
@@ -26,7 +26,7 @@ export default function UserProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put("/profile", {
+      const { data } = await axios.put('/profile', {
         name,
         password,
         address,
@@ -37,11 +37,11 @@ export default function UserProfile() {
       } else {
         setAuth({ ...auth, user: data });
         // local storage update
-        let ls = localStorage.getItem("auth");
+        let ls = localStorage.getItem('auth');
         ls = JSON.parse(ls);
         ls.user = data;
-        localStorage.setItem("auth", JSON.stringify(ls));
-        toast.success("Profile updated");
+        localStorage.setItem('auth', JSON.stringify(ls));
+        toast.success('Профіль оновлено');
       }
     } catch (err) {
       console.log(err);
@@ -50,7 +50,10 @@ export default function UserProfile() {
 
   return (
     <>
-      <Jumbotron title={`Hello ${auth?.user?.name}`} subTitle="Dashboard" />
+      <Jumbotron
+        title={`Вітаємо ${auth?.user?.name}`}
+        subTitle="панель користувача"
+      />
 
       <div className="container-fluid">
         <div className="row">
@@ -58,13 +61,13 @@ export default function UserProfile() {
             <UserMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Profile</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Профіль користувача</div>
 
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 className="form-control m-2 p-2"
-                placeholder="Enter your name"
+                placeholder="Ввести ім'я"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 autoFocus={true}
@@ -73,7 +76,7 @@ export default function UserProfile() {
               <input
                 type="email"
                 className="form-control m-2 p-2"
-                placeholder="Enter your email"
+                placeholder="Ввести e-mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={true}
@@ -82,19 +85,19 @@ export default function UserProfile() {
               <input
                 type="password"
                 className="form-control m-2 p-2"
-                placeholder="Enter your password"
+                placeholder="Ввести пароль"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
 
               <textarea
                 className="form-control m-2 p-2"
-                placeholder="Enter your address"
+                placeholder="Ввести адресу"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
 
-              <button className="btn btn-primary m-2 p-2">Submit</button>
+              <button className="btn btn-primary m-2 p-2">Зберегти</button>
             </form>
           </div>
         </div>

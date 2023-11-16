@@ -29,7 +29,10 @@ export default function UserOrders() {
   );
   return (
     <>
-      <Jumbotron title={`Hello ${auth?.user?.name}`} subTitle="Dashboard" />
+      <Jumbotron
+        title={`Вітаємо ${auth?.user?.name}`}
+        subTitle="Панель користувача"
+      />
 
       <div className="container-fluid">
         <div className="row">
@@ -37,56 +40,58 @@ export default function UserOrders() {
             <UserMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Orders</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Замовлення</div>
 
-            {sortedOrders?.map((o, i) => {
-              return (
-                <div
-                  key={o._id}
-                  className="border shadow bg-light rounded-4 mb-5"
-                >
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Buyer</th>
-                        <th scope="col">Ordered</th>
-                        <th scope="col">Payment</th>
-                        <th scope="col">Quantity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>{o?.status}</td>
-                        <td>{o?.buyer?.name}</td>
-                        <td>{moment(o?.createdAt).fromNow()}</td>
-                        <td>
-                          {o?.payment?.success ? 'Success' : 'Failed'}
-                          {' - '}
-                          {o?.cartTotal} грн
-                        </td>
-                        <td>{o?.products?.length} products</td>
-                      </tr>
-                    </tbody>
-                  </table>
+            {orders
+              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((o, i) => {
+                return (
+                  <div
+                    key={o._id}
+                    className="border shadow bg-light rounded-4 mb-5"
+                  >
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Статус</th>
+                          <th scope="col">Покупець</th>
+                          <th scope="col">Замовлено</th>
+                          <th scope="col">Оплата</th>
+                          <th scope="col">Кількість</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{o?._id}</td>
+                          <td>{o?.status}</td>
+                          <td>{o?.buyer?.name}</td>
+                          <td>{moment(o?.createdAt).fromNow()}</td>
+                          <td>
+                            {o?.payment?.success ? 'Success' : 'Failed'}
+                            {' - '}
+                            {o?.cartTotal} грн
+                          </td>
+                          <td>{o?.products?.length} products</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                  <div className="container">
-                    <div className="row m-2">
-                      {o?.products?.map((p, i) => (
-                        <OrderProductCardHorizontal
-                          key={i}
-                          p={p}
-                          total={o.cartTotal}
-                          remove={false}
-                        />
-                      ))}
+                    <div className="container">
+                      <div className="row m-2">
+                        {o?.products?.map((p, i) => (
+                          <OrderProductCardHorizontal
+                            key={i}
+                            p={p}
+                            total={o.cartTotal}
+                            remove={false}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>

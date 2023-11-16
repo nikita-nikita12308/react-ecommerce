@@ -15,13 +15,13 @@ const orderSchema = new Schema(
     buyer: { type: ObjectId, ref: 'User' },
     status: {
       type: String,
-      default: 'Not processed',
+      default: 'Не оброблено',
       enum: [
-        'Not processed',
-        'Processing',
-        'Shipped',
-        'Delivered',
-        'Cancelled',
+        'Не оброблено',
+        'Обробка',
+        'Відправлено',
+        'Доставлено',
+        'Скасовано',
       ],
     },
     fullName: {

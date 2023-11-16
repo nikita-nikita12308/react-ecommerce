@@ -1,6 +1,6 @@
-import { useAuth } from "../../context/auth";
-import Jumbotron from "../../components/cards/Jumbotron";
-import UserMenu from "../../components/nav/UserMenu";
+import { useAuth } from '../../context/auth';
+import Jumbotron from '../../components/cards/Jumbotron';
+import UserMenu from '../../components/nav/UserMenu';
 
 export default function UserDashboard() {
   // context
@@ -8,7 +8,10 @@ export default function UserDashboard() {
 
   return (
     <>
-      <Jumbotron title={`Hello ${auth?.user?.name}`} subTitle="Dashboard" />
+      <Jumbotron
+        title={`Вітаємо ${auth?.user?.name}`}
+        subTitle="панель користувача"
+      />
 
       <div className="container-fluid">
         <div className="row">
@@ -16,7 +19,9 @@ export default function UserDashboard() {
             <UserMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">User Information</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">
+              Інформація про користувача
+            </div>
 
             <ul className="list-group">
               <li className="list-group-item">{auth?.user?.name}</li>
