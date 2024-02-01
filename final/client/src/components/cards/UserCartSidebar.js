@@ -118,7 +118,7 @@ export default function UserCartSidebar() {
         </div>
       )}
       <div className="mt-3">
-        {!clientToken || !cart?.length ? (
+        {!cart?.length ? (
           ''
         ) : (
           <>

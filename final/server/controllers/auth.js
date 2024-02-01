@@ -9,8 +9,8 @@ dotenv.config();
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465, // Usually 587 for secure or 25 for unencrypted
-  secure: true, // Use true for 465, false for other ports
+  port: 587, // Usually 587 for secure or 25 for unencrypted
+  secure: false, // Use true for 465, false for other ports
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS,
@@ -172,13 +172,16 @@ export const forgotPassword = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     const mailOptions = {
-      from: 'ndatskiy@gmail.com',
+      from: {
+        name: "Сирна Насолода",
+        address: process.env.GMAIL_USER
+      },
       to: user.email,
-      subject: 'Password Reset',
+      subject: 'Відновлення паролю',
       text: 'This is the text body of the email',
       html: `<p>Your Reset password token click the link to reset password. "${
         req.protocol
-      }://${req.get('host')}/api/reset-password/${token}"</p>`,
+      }://${process.env.BASE_LINK}/resetPassword/${token}"</p>`,
     };
 
     // Send the email

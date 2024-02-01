@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import Jumbotron from '../../components/cards/Jumbotron';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -69,7 +70,9 @@ export default function Login() {
                 Submit
               </button>
               <button type="button" class="btn btn-link">
-                Forgot password
+              <NavLink className="nav-link" to="/forgotPassword">
+                Забули пароль ?
+              </NavLink>
               </button>
             </form>
           </div>
