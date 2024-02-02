@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import Jumbotron from '../components/cards/Jumbotron';
-import axios from 'axios';
-import ProductCard from '../components/cards/ProductCard';
+import { useEffect, useState } from "react";
+import Jumbotron from "../components/cards/Jumbotron";
+import axios from "axios";
+import ProductCard from "../components/cards/ProductCard";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -21,7 +21,7 @@ export default function Home() {
 
   const getTotal = async () => {
     try {
-      const { data } = await axios.get('/products-count');
+      const { data } = await axios.get("/products-count");
       setTotal(data);
     } catch (err) {
       console.log(err);
@@ -55,68 +55,111 @@ export default function Home() {
   return (
     <div>
       <Jumbotron
-        title="Сирна Насолода"
-        sutTitle="Welcome to React E-commerce"
+        title={
+          <div style={{ height: "" }}>
+            <img
+              src="logo.png"
+              alt="Your Image"
+              style={{ marginRight: "10px", height: "90px" }}
+            />
+            Сирна Насолода
+          </div>
+        }
+        sutTitle="Home Page"
       />
       <div className="container-fluid">
         <div className="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3 mx-auto">
-          <div className="flex-fill bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+          <div
+            className="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden mx-auto"
+            style={{ flex: "0 0 33%" }}
+          >
             <div className="my-3 p-3">
-              <h2 className="display-5">Another headline</h2>
-              <p className="lead">And an even wittier subheading.</p>
+              <h2 className="display-5">Рай для любителів сирів</h2>
+              <p className="lead">Від місцевих сироварень до вашого порогу!</p>
             </div>
             <div
-              className="bg-tertiary-color shadow-sm mx-auto"
+              className="justify-content-center align-items-center"
               style={{
-                width: '80%',
-                height: '300px',
-                borderRadius: '21px 21px 0 0',
+                width: "100%",
+                height: "300px",
+                borderRadius: "21px 21px 0 0",
               }}
             >
               <img
-                src="photo3-transformed.png"
+                src="thumbnail1.jpg"
                 alt="Your Image"
-                style={{ width: '', height: '120%', objectFit: 'cover' }}
+                style={{
+                  width: "",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)",
+                }}
               />
             </div>
           </div>
-          <div className="flex-fill bg-tertiary-color me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+          <div
+            className="bg-tertiary-color me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden"
+            style={{ flex: "0 0 32%" }}
+          >
             <div className="my-3 py-3">
-              <h2 className="display-5">Another headline</h2>
-              <p className="lead">And an even wittier subheading.</p>
+              <h2 className="display-5">
+                Відкрийте для себе досконалість місцевих сирів.
+              </h2>
+              <p className="lead">
+                Відкрийте для себе смак, де кожен шматочок розповідає історію.
+              </p>
             </div>
             <div
-              className="bg-light shadow-sm mx-auto"
+              className="text-center"
               style={{
-                width: '80%',
-                height: '300px',
-                borderRadius: '21px 21px 0 0',
+                width: "100%",
+                height: "300px",
+                borderRadius: "21px 21px 0 0",
+                marginBottom: "20px",
               }}
             >
               <img
-                src="photo3-transformed.png"
+                src="thumbnail3.jpg"
                 alt="Your Image"
-                style={{ width: '', height: '120%', objectFit: 'cover' }}
+                style={{
+                  width: "",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)",
+                }}
               />
             </div>
           </div>
-          <div className="flex-fill bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+          <div
+            className="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden"
+            style={{ flex: "0 0 33%" }}
+          >
             <div className="my-3 p-3">
-              <h2 className="display-5">Another headline</h2>
-              <p className="lead">And an even wittier subheading.</p>
+              <h2 className="display-5">Кулінарна пригода чекає!</h2>
+              <p className="lead">
+                Відкрийте для себе досконалість місцевих сирів.
+              </p>
             </div>
             <div
-              className="bg-tertiary-color shadow-sm mx-auto"
+              className="text-center"
               style={{
-                width: '80%',
-                height: '300px',
-                borderRadius: '21px 21px 0 0',
+                width: "100%",
+                height: "300px",
+                borderRadius: "21px 21px 0 0",
               }}
             >
               <img
-                src="photo3-transformed.png"
+                src="thumbnail2.jpg"
                 alt="Your Image"
-                style={{ width: '', height: '120%', objectFit: 'cover' }}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)",
+                }}
               />
             </div>
           </div>
@@ -157,7 +200,7 @@ export default function Home() {
                 setPage(page + 1);
               }}
             >
-              {loading ? 'Loading...' : 'Load more'}
+              {loading ? "Loading..." : "Load more"}
             </button>
           )}
         </div>
