@@ -1,10 +1,10 @@
-import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../context/auth';
-import { useNavigate } from 'react-router-dom';
-import Search from '../forms/Search';
-import useCategory from '../../hooks/useCategory';
-import { useCart } from '../../context/cart';
-import { Badge } from 'antd';
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
+import Search from "../forms/Search";
+import useCategory from "../../hooks/useCategory";
+import { useCart } from "../../context/cart";
+import { Badge } from "antd";
 
 export default function Menu() {
   // context
@@ -17,14 +17,19 @@ export default function Menu() {
   // console.log("categories in menu => ", categories);
 
   const logout = () => {
-    setAuth({ ...auth, user: null, token: '' });
-    localStorage.removeItem('auth');
-    navigate('/login');
+    setAuth({ ...auth, user: null, token: "" });
+    localStorage.removeItem("auth");
+    navigate("/login");
   };
 
   return (
     <>
       <ul className="nav d-flex justify-content-between shadow-sm mb-2 sticky-top bg-light">
+        <li className="nav-item">
+          <a className="nav-link phone-li" href="tel:+380679299456">
+            Телефон: +380679299456
+          </a>
+        </li>
         <li className="nav-item">
           <NavLink className="nav-link" aria-current="page" to="/">
             Головна
@@ -48,7 +53,7 @@ export default function Menu() {
 
             <ul
               className="dropdown-menu"
-              style={{ height: '300px', overflow: 'scroll' }}
+              style={{ height: "300px", overflow: "scroll" }}
             >
               <li>
                 <NavLink className="nav-link" to="/categories">
@@ -109,7 +114,7 @@ export default function Menu() {
                   <NavLink
                     className="nav-link"
                     to={`/dashboard/${
-                      auth?.user?.role === 1 ? 'admin' : 'user'
+                      auth?.user?.role === 1 ? "admin" : "user"
                     }`}
                   >
                     Панель
