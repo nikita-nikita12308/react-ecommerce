@@ -1,10 +1,10 @@
-import { Badge } from 'antd';
-import toast from 'react-hot-toast';
-import { useNavigate, Link } from 'react-router-dom';
-import { useCart } from '../../context/cart';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FaStar, FaStarHalf, FaRegStar } from 'react-icons/fa';
+import { Badge } from "antd";
+import toast from "react-hot-toast";
+import { useNavigate, Link } from "react-router-dom";
+import { useCart } from "../../context/cart";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaStar, FaStarHalf, FaRegStar } from "react-icons/fa";
 
 export default function ProductCard({ p }) {
   // context
@@ -31,9 +31,9 @@ export default function ProductCard({ p }) {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       if (i < Math.floor(rating)) {
-        stars.push(<FaStar key={i} style={{ color: '#FFD700' }} />);
+        stars.push(<FaStar key={i} style={{ color: "#FFD700" }} />);
       } else {
-        stars.push(<FaRegStar key={i} style={{ color: '#FFD700' }} />);
+        stars.push(<FaRegStar key={i} style={{ color: "#FFD700" }} />);
       }
     }
 
@@ -56,7 +56,7 @@ export default function ProductCard({ p }) {
           text={`${
             p?.quantity >= 1
               ? `${p?.quantity - p?.sold} в наявності`
-              : 'Немає в наявності'
+              : "Немає в наявності"
           }`}
           placement="start"
           color="green"
@@ -65,7 +65,7 @@ export default function ProductCard({ p }) {
             className="card-img-top"
             src={`${process.env.REACT_APP_API}/product/photo/${p._id}`}
             alt={p.name}
-            style={{ height: '300px', objectFit: 'cover' }}
+            style={{ height: "300px", objectFit: "cover" }}
           />
         </Badge.Ribbon>
       </Badge.Ribbon>
@@ -78,8 +78,8 @@ export default function ProductCard({ p }) {
 
       <div className="d-flex justify-content-between">
         <button
-          className="btn btn-primary col card-button"
-          style={{ borderBottomLeftRadius: '5px' }}
+          className="btn btn-primary col-md-6 card-button flex-grow-1"
+          style={{ borderBottomLeftRadius: "5px", fontSize: "0.9rem" }}
           onClick={() => navigate(`/product/${p.slug}`)}
         >
           Детальніше
@@ -87,22 +87,26 @@ export default function ProductCard({ p }) {
 
         {isInCart ? (
           // Render a link to the cart if the product is in the cart
-          <Link to="/cart" className="btn btn-outline-warning col card-button">
+          <Link
+            to="/cart"
+            className="btn btn-outline-warning col-md-6 card-button flex-grow-1"
+            style={{ fontSize: "0.9rem" }}
+          >
             Перейти в кошик
           </Link>
         ) : (
           // Render the "Додати в кошик" button if the product is not in the cart
           <button
-            className="btn btn-outline-primary col card-button"
-            style={{ borderBottomRightRadius: '5px' }}
+            className="btn btn-outline-primary col-md-6 card-button flex-grow-1"
+            style={{ borderBottomRightRadius: "5px", fontSize: "0.9rem" }}
             onClick={() => {
               const updatedProduct = { ...p, cart_quantity: 1 };
               setCart([...cart, updatedProduct]);
               localStorage.setItem(
-                'cart',
+                "cart",
                 JSON.stringify([...cart, updatedProduct])
               );
-              toast.success('Added to cart');
+              toast.success("Added to cart");
             }}
           >
             Замовити

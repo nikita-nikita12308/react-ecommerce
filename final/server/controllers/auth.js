@@ -1,14 +1,14 @@
-import User from '../models/user.js';
-import { hashPassword, comparePassword } from '../helpers/auth.js';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import Order from '../models/order.js';
-import crypto from 'crypto';
-import nodemailer from 'nodemailer';
+import User from "../models/user.js";
+import { hashPassword, comparePassword } from "../helpers/auth.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import Order from "../models/order.js";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 587, // Usually 587 for secure or 25 for unencrypted
   secure: false, // Use true for 465, false for other ports
   auth: {
@@ -23,18 +23,18 @@ export const register = async (req, res) => {
     const { name, email, password } = req.body;
     // 2. all fields require validation
     if (!name.trim()) {
-      return res.json({ error: 'Name is required' });
+      return res.json({ error: "Name is required" });
     }
     if (!email) {
-      return res.json({ error: 'Email is taken' });
+      return res.json({ error: "Email is taken" });
     }
     if (!password || password.length < 6) {
-      return res.json({ error: 'Password must be at least 6 characters long' });
+      return res.json({ error: "Password must be at least 6 characters long" });
     }
     // 3. check if email is taken
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.json({ error: 'Email is taken' });
+      return res.json({ error: "Email is taken" });
     }
     // 4. hash password
     const hashedPassword = await hashPassword(password);
@@ -46,7 +46,7 @@ export const register = async (req, res) => {
     }).save();
     // 6. create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '7d',
+      expiresIn: "7d",
     });
     // 7. send response
     res.json({
@@ -69,24 +69,24 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     // 2. all fields require validation
     if (!email) {
-      return res.json({ error: 'Email is taken' });
+      return res.json({ error: "Email is taken" });
     }
     if (!password || password.length < 6) {
-      return res.json({ error: 'Password must be at least 6 characters long' });
+      return res.json({ error: "Password must be at least 6 characters long" });
     }
     // 3. check if email is taken
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ error: 'User not found' });
+      return res.json({ error: "User not found" });
     }
     // 4. compare password
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return res.json({ error: 'Wrong password' });
+      return res.json({ error: "Wrong password" });
     }
     // 5. create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '7d',
+      expiresIn: "7d",
     });
     // 7. send response
     res.json({
@@ -114,7 +114,7 @@ export const updateProfile = async (req, res) => {
     // check password length
     if (password && password.length < 6) {
       return res.json({
-        error: 'Password is required and should be min 6 characters long',
+        error: "Password is required and should be min 6 characters long",
       });
     }
     // hash the password
@@ -140,8 +140,8 @@ export const updateProfile = async (req, res) => {
 export const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ buyer: req.user._id })
-      .populate('products.product', '-photo')
-      .populate('buyer', 'name');
+      .populate("products.product", "-photo")
+      .populate("buyer", "name");
     res.json(orders);
   } catch (err) {
     console.log(err);
@@ -151,9 +151,9 @@ export const getOrders = async (req, res) => {
 export const allOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
-      .populate('products', '-photo')
-      .populate('buyer', 'name')
-      .sort({ createdAt: '-1' });
+      .populate("products.product", "-photo")
+      .populate("buyer", "name")
+      .sort({ createdAt: "-1" });
     res.json(orders);
   } catch (err) {
     console.log(err);
@@ -166,7 +166,7 @@ export const forgotPassword = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: 'This email is not exist' });
+        .json({ success: false, message: "This email is not exist" });
     }
     const token = await user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
@@ -174,14 +174,12 @@ export const forgotPassword = async (req, res) => {
     const mailOptions = {
       from: {
         name: "Сирна Насолода",
-        address: process.env.GMAIL_USER
+        address: process.env.GMAIL_USER,
       },
       to: user.email,
-      subject: 'Відновлення паролю',
-      text: 'This is the text body of the email',
-      html: `<p>Your Reset password token click the link to reset password. "${
-        req.protocol
-      }://${process.env.BASE_LINK}/resetPassword/${token}"</p>`,
+      subject: "Відновлення паролю",
+      text: "This is the text body of the email",
+      html: `<p>Your Reset password token click the link to reset password. "${req.protocol}://${process.env.BASE_LINK}/resetPassword/${token}"</p>`,
     };
 
     // Send the email
@@ -189,12 +187,12 @@ export const forgotPassword = async (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        console.log('Email sent: ' + info.response);
+        console.log("Email sent: " + info.response);
       }
     });
     res
       .status(200)
-      .json({ success: true, token: token, message: 'Email has been sent' });
+      .json({ success: true, token: token, message: "Email has been sent" });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -203,9 +201,9 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const hashedToken = crypto
-      .createHash('sha256')
+      .createHash("sha256")
       .update(req.params.token)
-      .digest('hex');
+      .digest("hex");
 
     const user = await User.findOne({
       passwordResetToken: hashedToken,
@@ -214,7 +212,7 @@ export const resetPassword = async (req, res) => {
     if (!user)
       res
         .status(400)
-        .json({ success: false, message: 'Invalid or expired token' });
+        .json({ success: false, message: "Invalid or expired token" });
     const hashedPassword = await hashPassword(req.body.password);
     user.password = hashedPassword;
     user.passwordResetToken = null;

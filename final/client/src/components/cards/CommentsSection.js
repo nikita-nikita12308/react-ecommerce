@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
-import './CommentsSection.css';
-import { FaStar } from 'react-icons/fa';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import "./CommentsSection.css";
+import { FaStar } from "react-icons/fa";
+import moment from "moment";
 
 const Comment = ({ comment, onReply }) => {
-  const [replyText, setReplyText] = useState('');
+  const [replyText, setReplyText] = useState("");
   const [isReplying, setIsReplying] = useState(false);
 
   const handleReply = () => {
     setIsReplying(true);
   };
   const handleCancel = () => {
-    setReplyText('');
+    setReplyText("");
     setIsReplying(false);
   };
   const handleSendReply = () => {
     onReply(comment._id, replyText);
-    setReplyText('');
+    setReplyText("");
     setIsReplying(false);
   };
   const renderRating = () => {
     const stars = [];
     for (let i = 0; i < comment.rating; i++) {
-      stars.push(<FaStar style={{ color: '#FFD700' }} key={i} />);
+      stars.push(<FaStar style={{ color: "#FFD700" }} key={i} />);
     }
     return stars;
   };
 
-  const formattedDateTime = moment(comment.createdAt).format(
-    'DD.MM.YYYY HH:mm'
-  );
+  const formattedDateTime = (typeOfComment) => {
+    return moment(typeOfComment.createdAt).format("DD.MM.YYYY HH:mm");
+  };
 
   return (
     <div className="commentContainer" key={comment._id}>
@@ -45,7 +45,7 @@ const Comment = ({ comment, onReply }) => {
         )}
 
         <p>
-          <strong>{comment.user.name} </strong> - {formattedDateTime}
+          <strong>{comment.user.name} </strong> - {formattedDateTime(comment)}
         </p>
         <p>{comment.text}</p>
         <div>
@@ -57,17 +57,17 @@ const Comment = ({ comment, onReply }) => {
             <textarea
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              className="form-control"
+              className="form-control mt-2"
               placeholder="Напишіть відповідь..."
             />
             <button
-              className="btn btn-outline-primary btn-sm me-2"
+              className="btn btn-outline-primary btn-sm me-2 mt-2"
               onClick={handleSendReply}
             >
               Відправити
             </button>
             <button
-              className="btn btn-outline-secondary btn-sm"
+              className="btn btn-outline-secondary btn-sm mt-2"
               onClick={handleCancel}
             >
               Відмінити
@@ -79,8 +79,8 @@ const Comment = ({ comment, onReply }) => {
       <div>
         {comment.replies.map((reply) => (
           <div className="replyContainer" key={reply._id}>
-            <p>User: {reply.user.name}</p>
-            <p>Text: {reply.text}</p>
+            <strong>{reply.user.name} </strong>
+            <p>{reply.text}</p>
           </div>
         ))}
       </div>
@@ -88,15 +88,39 @@ const Comment = ({ comment, onReply }) => {
   );
 };
 
-const CommentsList = ({ comments, handleReply }) => {
-  const sortedComments = comments.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
+const CommentsList = ({ comments, handleReply, commentsPerPage }) => {
+  const [displayedComments, setDisplayedComments] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(commentsPerPage);
+  useEffect(() => {
+    // Sort comments by date in descending order
+    const sortedComments = [...comments].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    // Slice comments based on the visible count
+    const slicedComments = sortedComments.slice(0, visibleCount);
+
+    setDisplayedComments(slicedComments);
+  }, [comments, visibleCount]);
+  const handleLoadMore = () => {
+    setVisibleCount((prevCount) => prevCount + commentsPerPage);
+  };
   return (
     <div className="commentsListContainer">
-      {sortedComments.map((comment) => (
+      {displayedComments.map((comment) => (
         <Comment key={comment._id} comment={comment} onReply={handleReply} />
       ))}
+      {visibleCount < comments.length && (
+        <div className="text-center">
+          <a
+            href="#load-more"
+            className="nav-link pb-4"
+            onClick={handleLoadMore}
+          >
+            Завантажити більше...
+          </a>
+        </div>
+      )}
     </div>
   );
 };
