@@ -1,14 +1,13 @@
-import moment from 'moment';
-import 'moment/locale/uk'; // Import Ukrainian locale
-import { useCart } from '../../context/cart';
-import React, { useState, useEffect } from 'react';
-moment.locale('uk');
+import moment from "moment";
+import "moment/locale/uk"; // Import Ukrainian locale
+import { useCart } from "../../context/cart";
+import React, { useState, useEffect } from "react";
+moment.locale("uk");
 export default function ProductCardHorizontal({ p, remove = true }) {
   // context
   const [cart, setCart] = useCart();
   const [quantity, setQuantity] = useState(p.cart_quantity);
   let newPrice = p.price * quantity;
-
   const updateQuantity = (newQuantity) => {
     if (newQuantity > p.quantity) return;
     const updatedQuantity = newQuantity < 1 ? 1 : newQuantity;
@@ -28,7 +27,7 @@ export default function ProductCardHorizontal({ p, remove = true }) {
     let index = myCart.findIndex((item) => item._id === productId);
     myCart.splice(index, 1);
     setCart(myCart);
-    localStorage.setItem('cart', JSON.stringify(myCart));
+    localStorage.setItem("cart", JSON.stringify(myCart));
   };
   const handleIncrement = () => {
     updateQuantity(quantity + 1);
@@ -49,27 +48,27 @@ export default function ProductCardHorizontal({ p, remove = true }) {
             src={`${process.env.REACT_APP_API}/product/photo/${p._id}`}
             alt={p.name}
             style={{
-              height: '150px',
-              width: '150px',
-              objectFit: 'cover',
-              marginLeft: '-12px',
-              borderRopRightRadius: '0px',
+              height: "150px",
+              width: "150px",
+              objectFit: "cover",
+              marginLeft: "-12px",
+              borderRopRightRadius: "0px",
             }}
           />
         </div>
         <div className="col-md-8">
           <div className="card-body">
             <h5 className="card-title">
-              {p.name}
-              {' - '}
-              {p.price.toLocaleString('uk-UA', {
-                style: 'currency',
-                currency: 'UAH',
+              {p?.name}
+              {" - "}
+              {p?.price.toLocaleString("uk-UA", {
+                style: "currency",
+                currency: "UAH",
               })}
-              {'. Всього: '}
-              {newPrice.toLocaleString('uk-UA', {
-                style: 'currency',
-                currency: 'UAH',
+              {". Всього: "}
+              {newPrice.toLocaleString("uk-UA", {
+                style: "currency",
+                currency: "UAH",
               })}
             </h5>
             <p className="card-text">{`${p?.description?.substring(

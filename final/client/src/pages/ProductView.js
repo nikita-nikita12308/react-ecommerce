@@ -1,38 +1,56 @@
-import { useState, useEffect } from 'react';
-import moment from 'moment';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Badge } from 'antd';
+import { useState, useEffect } from "react";
+import moment from "moment";
+import axios from "axios";
+import { useParams, Link } from "react-router-dom";
+import { Badge } from "antd";
 import {
   FaDollarSign,
   FaProjectDiagram,
   FaRegClock,
   FaCheck,
   FaTimes,
+  FaStar,
+  FaRegStar,
   FaTruckMoving,
   FaWarehouse,
   FaRocket,
-} from 'react-icons/fa';
-import ProductCard from '../components/cards/ProductCard';
-import toast from 'react-hot-toast';
-import { useCart } from '../context/cart';
-import CommentsList from '../components/cards/CommentsSection';
+  FaMoneyBillAlt,
+} from "react-icons/fa";
+import ProductCard from "../components/cards/ProductCard";
+import toast from "react-hot-toast";
+import { useCart } from "../context/cart";
+import CommentsList from "../components/cards/CommentsSection";
 
 export default function ProductView() {
   // context
   const [cart, setCart] = useCart();
+
   // state
   const [product, setProduct] = useState({});
   const [related, setRelated] = useState([]);
   const [commentsData, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalRating, setTotalRating] = useState(0);
   // hooks
   const params = useParams();
-
+  const isInCart = cart.some((p) => p._id === product._id);
   useEffect(() => {
     if (params?.slug) loadProduct();
-  }, [params?.slug]);
+    const fetchAverageRating = async () => {
+      try {
+        const { data } = await axios.get(
+          `/product/average-rating/${product._id}`
+        );
+        setAverageRating(data.averageRating);
+        setTotalRating(data.totalRating); // Set the average rating state
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAverageRating();
+  }, [params?.slug, product._id]);
 
   const loadProduct = async (req, res) => {
     try {
@@ -44,7 +62,6 @@ export default function ProductView() {
       console.log(err);
     }
   };
-
   const loadRelated = async (productId, categoryId) => {
     try {
       const { data } = await axios.get(
@@ -55,7 +72,6 @@ export default function ProductView() {
       console.log(err);
     }
   };
-
   const loadComments = async (productId) => {
     try {
       const { data } = await axios.get(`/product/comment/${productId}`);
@@ -76,17 +92,16 @@ export default function ProductView() {
       if (commentData?.error) {
         toast.error(commentData.error);
       } else {
-        toast.success(`Comment is created`);
+        toast.success(`Коментарій створено`);
         loadComments(product._id);
       }
-      setNewComment('');
+      setNewComment("");
       setNewRating(0);
     } catch (err) {
-      console.error(err.response.data.error);
-      toast.error(err.response.data.error);
+      console.error(err.response.data.message);
+      toast.error(err.response.data.message);
     }
   };
-
   const handleReply = async (commentId, replyText) => {
     try {
       const { replyData } = await axios.post(`/comment/${commentId}/replies`, {
@@ -95,28 +110,41 @@ export default function ProductView() {
       if (replyData?.error) {
         toast.error(replyData.error);
       } else {
-        toast.success(`Comment is created`);
-        console.log('Comments data before loadComments ' + commentsData);
+        toast.success(`Відповідь на коментар створено`);
         loadComments(product._id);
-        console.log('Comments data after loadComments ' + commentsData);
       }
     } catch (err) {
       console.error(err);
-      toast.error('Failed to add a reply');
+      toast.error(err.response.data.message);
     }
   };
+  const renderStarRating = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < Math.floor(rating)) {
+        stars.push(<FaStar key={i} style={{ color: "#FFD700" }} />);
+      } else {
+        stars.push(<FaRegStar key={i} style={{ color: "#FFD700" }} />);
+      }
+    }
+
+    return stars;
+  };
+
+  const stars = renderStarRating(averageRating);
+  const totalRatings = `(${totalRating})`;
 
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-9">
           <div className="card mb-3">
-            <Badge.Ribbon text={`${product?.sold} sold`} color="red">
+            <Badge.Ribbon text="" color="red">
               <Badge.Ribbon
                 text={`${
                   product?.quantity >= 1
-                    ? `${product?.quantity - product?.sold} in stock`
-                    : 'Out of stock'
+                    ? `${product?.quantity - product?.sold} В наявності`
+                    : "Немає в наявності"
                 }`}
                 placement="start"
                 color="green"
@@ -125,7 +153,7 @@ export default function ProductView() {
                   className="card-img-top"
                   src={`${process.env.REACT_APP_API}/product/photo/${product._id}`}
                   alt={product.name}
-                  style={{ height: '500px', width: '100%', objectFit: 'cover' }}
+                  style={{ height: "500px", width: "100%", objectFit: "cover" }}
                 />
               </Badge.Ribbon>
             </Badge.Ribbon>
@@ -138,49 +166,60 @@ export default function ProductView() {
             <div className="d-flex justify-content-between lead p-5 bg-light fw-bold">
               <div>
                 <p>
-                  <FaDollarSign /> Price:{' '}
-                  {product?.price?.toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
+                  <FaMoneyBillAlt /> Ціна:{" "}
+                  {product?.price?.toLocaleString("uk-UA", {
+                    style: "currency",
+                    currency: "UAH",
                   })}
                 </p>
 
                 <p>
-                  <FaProjectDiagram /> Category: {product?.category?.name}
+                  <FaProjectDiagram /> Категорія: {product?.category?.name}
                 </p>
 
                 <p>
-                  <FaRegClock /> Added: {moment(product.createdAt).fromNow()}
+                  <FaRegClock /> Доданий: {moment(product.createdAt).fromNow()}
                 </p>
 
                 <p>
-                  {product?.quantity > 0 ? <FaCheck /> : <FaTimes />}{' '}
-                  {product?.quantity > 0 ? 'In Stock' : 'Out of Stock'}
+                  {product?.quantity > 0 ? <FaCheck /> : <FaCheck />}{" "}
+                  {product?.quantity > 0 ? "В наявності" : "Під замовлення"}
                 </p>
 
                 <p>
-                  <FaWarehouse /> Available {product?.quantity - product?.sold}
+                  <FaWarehouse /> В наявності{" "}
+                  {product?.quantity - product?.sold}
                 </p>
 
                 <p>
-                  <FaRocket /> Sold {product.sold}
+                  <FaRocket /> Рейтинг {stars} {totalRatings}
                 </p>
               </div>
             </div>
-
-            <button
-              className="btn btn-outline-primary col card-button"
-              style={{
-                borderBottomRightRadius: '5px',
-                borderBottomLeftRadius: '5px',
-              }}
-              onClick={() => {
-                setCart([...cart, product]);
-                toast.success('Added to cart');
-              }}
-            >
-              Add to Cart
-            </button>
+            {isInCart ? (
+              <Link
+                to="/cart"
+                className="btn btn-outline-warning col card-button"
+                style={{ fontSize: "0.9rem" }}
+              >
+                Перейти в кошик
+              </Link>
+            ) : (
+              <button
+                className="btn btn-outline-primary col card-button"
+                style={{
+                  borderBottomRightRadius: "5px",
+                  borderBottomLeftRadius: "5px",
+                }}
+                onClick={() => {
+                  const updatedProduct = { ...product, cart_quantity: 1 };
+                  setCart([...cart, updatedProduct]);
+                  toast.success("Added to cart");
+                }}
+              >
+                Додати в кошик
+              </button>
+            )}
           </div>
           <h4>Коментарі</h4>
           <div className="input-group mb-3">
@@ -210,7 +249,11 @@ export default function ProductView() {
               Додати
             </button>
           </div>
-          <CommentsList comments={commentsData} handleReply={handleReply} />
+          <CommentsList
+            comments={commentsData}
+            handleReply={handleReply}
+            commentsPerPage={2}
+          />
         </div>
 
         <div className="col-md-3">

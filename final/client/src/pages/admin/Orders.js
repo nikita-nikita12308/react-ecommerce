@@ -4,7 +4,7 @@ import Jumbotron from "../../components/cards/Jumbotron";
 import AdminMenu from "../../components/nav/AdminMenu";
 import axios from "axios";
 import moment from "moment";
-import ProductCardHorizontal from "../../components/cards/ProductCardHorizontal";
+import OrderProductCardHorizontal from "../../components/cards/OrderProductCardHorizontal";
 import { Select } from "antd";
 
 const { Option } = Select;
@@ -103,8 +103,13 @@ export default function AdminOrders() {
 
                   <div className="container">
                     <div className="row m-2">
+                      {console.log("Продукти: ", o.products)}
                       {o?.products?.map((p, i) => (
-                        <ProductCardHorizontal key={i} p={p} remove={false} />
+                        <OrderProductCardHorizontal
+                          key={i}
+                          p={p}
+                          remove={false}
+                        />
                       ))}
                     </div>
                   </div>
