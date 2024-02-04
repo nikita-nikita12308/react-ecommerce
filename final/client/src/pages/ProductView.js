@@ -98,8 +98,8 @@ export default function ProductView() {
       setNewComment("");
       setNewRating(0);
     } catch (err) {
-      console.error(err.response.data.message);
-      toast.error(err.response.data.message);
+      console.error(err);
+      toast.error(err);
     }
   };
   const handleReply = async (commentId, replyText) => {
@@ -237,12 +237,11 @@ export default function ProductView() {
                 value={newRating}
                 onChange={(e) => setNewRating(e.target.value)}
               >
-                <option value={0}>Оберіть рейтинг</option>
-                <option value={1}>1 зірка</option>
-                <option value={2}>2 зірки</option>
-                <option value={3}>3 зірки</option>
-                <option value={4}>4 зірки</option>
-                <option value={5}>5 зірок</option>
+                <option value={5}>⭐⭐⭐⭐⭐</option>
+                <option value={4}>⭐⭐⭐⭐</option>
+                <option value={3}>⭐⭐⭐</option>
+                <option value={2}>⭐⭐</option>
+                <option value={1}>⭐</option>
               </select>
             </div>
             <button className="btn btn-primary" onClick={handleAddComment}>

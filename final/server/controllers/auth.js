@@ -170,7 +170,7 @@ export const forgotPassword = async (req, res) => {
     }
     const token = await user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
-
+    const resetPasswordLink = `${req.protocol}://${process.env.BASE_LINK}/resetPassword/${token}`;
     const mailOptions = {
       from: {
         name: "Сирна Насолода",
@@ -178,8 +178,7 @@ export const forgotPassword = async (req, res) => {
       },
       to: user.email,
       subject: "Відновлення паролю",
-      text: "This is the text body of the email",
-      html: `<p>Your Reset password token click the link to reset password. "${req.protocol}://${process.env.BASE_LINK}/resetPassword/${token}"</p>`,
+      html: `<p>Для зміни паролю перейдіть за <a href="${resetPasswordLink}">посиланням</a>. Посилання дійсне 10 хв.</p>`,
     };
 
     // Send the email

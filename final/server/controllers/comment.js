@@ -1,6 +1,6 @@
-import Comment from '../models/comment.js';
-import User from '../models/user.js';
-import { deleteOne, updateOne } from './handleFactory.js';
+import Comment from "../models/comment.js";
+import User from "../models/user.js";
+import { deleteOne, updateOne } from "./handleFactory.js";
 
 export const createComment = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ export const createComment = async (req, res) => {
     });
     res.status(201).json({
       success: true,
-      message: 'Comment created successful!',
+      message: "Comment created successful!",
       newComment,
     });
   } catch (err) {
@@ -45,11 +45,11 @@ export const createReply = async (req, res) => {
         .status(201)
         .json({ success: true, reply: newReply, comment: updatedComment });
     } else {
-      res.status(404).json({ success: false, error: 'Comment not found' });
+      res.status(404).json({ success: false, error: "Comment not found" });
     }
   } catch (err) {
-    console.error('Error creating reply:', err);
-    res.status(500).json({ success: false, error: 'Failed to create reply' });
+    console.error("Error creating reply:", err);
+    res.status(500).json({ success: false, error: "Failed to create reply" });
   }
 };
 
@@ -58,12 +58,12 @@ export const listComments = async (req, res) => {
     const productId = req.params.productId;
     const comments = await Comment.find({ product: productId })
       .populate({
-        path: 'user',
-        select: 'name',
+        path: "user",
+        select: "name",
       })
       .populate({
-        path: 'replies.user',
-        select: 'name',
+        path: "replies.user",
+        select: "name",
       });
     res.status(200).json({ data: comments });
   } catch (err) {

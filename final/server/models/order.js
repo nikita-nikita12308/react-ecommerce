@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.Schema;
@@ -7,21 +7,21 @@ const orderSchema = new Schema(
   {
     products: [
       {
-        product: { type: ObjectId, ref: 'Product' },
+        product: { type: ObjectId, ref: "Product" },
         quantity: Number,
       },
     ],
     payment: {},
-    buyer: { type: ObjectId, ref: 'User' },
+    buyer: { type: ObjectId, ref: "User" },
     status: {
       type: String,
-      default: 'Не оброблено',
+      default: "Не оброблено",
       enum: [
-        'Не оброблено',
-        'Обробка',
-        'Відправлено',
-        'Доставлено',
-        'Скасовано',
+        "Не оброблено",
+        "Обробка",
+        "Відправлено",
+        "Доставлено",
+        "Скасовано",
       ],
     },
     fullName: {
@@ -30,31 +30,52 @@ const orderSchema = new Schema(
     },
     city: {
       type: String,
-      required: [true, 'Замовлення повинно мати місто доставки'],
+      required: [true, "Замовлення повинно мати місто доставки"],
     },
     region: {
       type: String,
-      required: [true, 'Замовлення повинно мати регіон доставки'],
+      required: [true, "Замовлення повинно мати регіон доставки"],
     },
     phone: {
       type: String,
-      required: [true, 'Клієнт має мати телефон'],
+      required: [true, "Клієнт має мати телефон"],
     },
     postNumber: {
       type: String,
-      required: [true, 'Необхідний номер віділення пошти'],
+      required: [true, "Необхідний номер віділення пошти"],
     },
     paymentMethod: {
       type: String,
-      default: 'Готівка',
-      enum: ['Готівка', 'Передплата', 'Криптовалюта'],
+      default: "Готівка",
+      enum: ["Готівка", "Передплата", "Криптовалюта"],
     },
     cartTotal: {
       type: Number,
-      required: [true, 'Необхідна сума замовлення'],
+      required: [true, "Необхідна сума замовлення"],
+    },
+    orderNumber: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model('Order', orderSchema);
+orderSchema.pre("save", async function (next) {
+  if (!this.orderNumber) {
+    try {
+      const highestOrder = await this.constructor
+        .findOne({}, "orderNumber")
+        .sort({ orderNumber: -1 })
+        .exec();
+      this.orderNumber = highestOrder ? highestOrder.orderNumber + 1 : 1;
+      await this.validate();
+    } catch (err) {
+      console.error("Error generating order number", error);
+      throw err;
+    }
+  }
+  next();
+});
+
+export default mongoose.model("Order", orderSchema);

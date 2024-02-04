@@ -1,13 +1,11 @@
-import Product from '../models/product.js';
-import fs from 'fs';
-import slugify from 'slugify';
-import braintree from 'braintree';
-import dotenv from 'dotenv';
-import Order from '../models/order.js';
-import sgMail from '@sendgrid/mail';
-
+import Product from "../models/product.js";
+import fs from "fs";
+import slugify from "slugify";
+import braintree from "braintree";
+import dotenv from "dotenv";
+import Order from "../models/order.js";
+import { transporter } from "../helpers/mail.js";
 dotenv.config();
-sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 // const gateway = new braintree.BraintreeGateway({
 //   environment: braintree.Environment.Sandbox,
@@ -27,19 +25,19 @@ export const create = async (req, res) => {
     // validation
     switch (true) {
       case !name.trim():
-        return res.json({ error: 'Name is required' });
+        return res.json({ error: "Name is required" });
       case !description.trim():
-        return res.json({ error: 'Description is required' });
+        return res.json({ error: "Description is required" });
       case !price.trim():
-        return res.json({ error: 'Price is required' });
+        return res.json({ error: "Price is required" });
       case !category.trim():
-        return res.json({ error: 'Category is required' });
+        return res.json({ error: "Category is required" });
       case !quantity.trim():
-        return res.json({ error: 'Quantity is required' });
+        return res.json({ error: "Quantity is required" });
       case !shipping.trim():
-        return res.json({ error: 'Shipping is required' });
+        return res.json({ error: "Shipping is required" });
       case photo && photo.size > 1000000:
-        return res.json({ error: 'Image should be less than 1mb in size' });
+        return res.json({ error: "Image should be less than 1mb in size" });
     }
 
     // create product
@@ -61,8 +59,8 @@ export const create = async (req, res) => {
 export const list = async (req, res) => {
   try {
     const products = await Product.find({})
-      .populate('category')
-      .select('-photo')
+      .populate("category")
+      .select("-photo")
       .limit(12)
       .sort({ createdAt: -1 });
 
@@ -75,8 +73,8 @@ export const list = async (req, res) => {
 export const read = async (req, res) => {
   try {
     const product = await Product.findOne({ slug: req.params.slug })
-      .select('-photo')
-      .populate('category');
+      .select("-photo")
+      .populate("category");
 
     res.json(product);
   } catch (err) {
@@ -87,10 +85,10 @@ export const read = async (req, res) => {
 export const photo = async (req, res) => {
   try {
     const product = await Product.findById(req.params.productId).select(
-      'photo'
+      "photo"
     );
     if (product.photo.data) {
-      res.set('Content-Type', product.photo.contentType);
+      res.set("Content-Type", product.photo.contentType);
       return res.send(product.photo.data);
     }
   } catch (err) {
@@ -102,7 +100,7 @@ export const remove = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(
       req.params.productId
-    ).select('-photo');
+    ).select("-photo");
     res.json(product);
   } catch (err) {
     console.log(err);
@@ -120,19 +118,19 @@ export const update = async (req, res) => {
     // validation
     switch (true) {
       case !name.trim():
-        res.json({ error: 'Name is required' });
+        res.json({ error: "Name is required" });
       case !description.trim():
-        res.json({ error: 'Description is required' });
+        res.json({ error: "Description is required" });
       case !price.trim():
-        res.json({ error: 'Price is required' });
+        res.json({ error: "Price is required" });
       case !category.trim():
-        res.json({ error: 'Category is required' });
+        res.json({ error: "Category is required" });
       case !quantity.trim():
-        res.json({ error: 'Quantity is required' });
+        res.json({ error: "Quantity is required" });
       case !shipping.trim():
-        res.json({ error: 'Shipping is required' });
+        res.json({ error: "Shipping is required" });
       case photo && photo.size > 1000000:
-        res.json({ error: 'Image should be less than 1mb in size' });
+        res.json({ error: "Image should be less than 1mb in size" });
     }
 
     // update product
@@ -165,10 +163,10 @@ export const filteredProducts = async (req, res) => {
     let args = {};
     if (checked.length > 0) args.category = checked;
     if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
-    console.log('args => ', args);
+    console.log("args => ", args);
 
     const products = await Product.find(args);
-    console.log('filtered products query => ', products.length);
+    console.log("filtered products query => ", products.length);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -190,7 +188,7 @@ export const listProducts = async (req, res) => {
     const page = req.params.page ? req.params.page : 1;
 
     const products = await Product.find({})
-      .select('-photo')
+      .select("-photo")
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 });
@@ -206,10 +204,10 @@ export const productsSearch = async (req, res) => {
     const { keyword } = req.params;
     const results = await Product.find({
       $or: [
-        { name: { $regex: keyword, $options: 'i' } },
-        { description: { $regex: keyword, $options: 'i' } },
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
       ],
-    }).select('-photo');
+    }).select("-photo");
 
     res.json(results);
   } catch (err) {
@@ -224,8 +222,8 @@ export const relatedProducts = async (req, res) => {
       category: categoryId,
       _id: { $ne: productId },
     })
-      .select('-photo')
-      .populate('category')
+      .select("-photo")
+      .populate("category")
       .limit(3);
 
     res.json(related);
@@ -343,7 +341,7 @@ const decrementQuantity = async (cart) => {
     });
 
     const updated = await Product.bulkWrite(bulkOps, {});
-    console.log('blk updated', updated);
+    console.log("blk updated", updated);
   } catch (err) {
     console.log(err);
   }
@@ -357,25 +355,30 @@ export const orderStatus = async (req, res) => {
       orderId,
       { status },
       { new: true }
-    ).populate('buyer', 'email name');
+    ).populate("buyer", "email name");
     // send email
 
     // prepare email
-    const emailData = {
-      from: process.env.EMAIL_FROM,
+    const mailOptions = {
+      from: {
+        name: "Сирна Насолода",
+        address: process.env.GMAIL_USER,
+      },
       to: order.buyer.email,
-      subject: 'Order status',
+      subject: "Статус Замовлення",
       html: `
-        <h1>Hi ${order.buyer.name}, Your order's status is: <span style="color:red;">${order.status}</span></h1>
-        <p>Visit <a href="${process.env.CLIENT_URL}/dashboard/user/orders">your dashboard</a> for more details</p>
-      `,
+          <h3>Вітаємо ${order.buyer.name}, Ваш статус замовлення: <span style="color:red;">${order.status}</span></h3>
+          <p>Відвідайте <a href="${req.protocol}://${process.env.BASE_LINK}/dashboard/user/orders">особистий кабінет</a> для того щоб отримати більше інформації.</p>
+        `,
     };
 
-    try {
-      await sgMail.send(emailData);
-    } catch (err) {
-      console.log(err);
-    }
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
 
     res.json(order);
   } catch (err) {

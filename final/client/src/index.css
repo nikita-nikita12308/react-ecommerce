@@ -114,3 +114,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: bold;
   /* Add any other styling properties you want */
 }
+
+.nav-link-cart {
+  color: #333;
+}

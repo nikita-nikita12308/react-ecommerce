@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.Schema;
 
@@ -6,11 +6,11 @@ const commentSchema = new Schema(
   {
     user: {
       type: ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     product: {
       type: ObjectId,
-      ref: 'Product',
+      ref: "Product",
     },
     text: {
       type: String,
@@ -20,15 +20,15 @@ const commentSchema = new Schema(
     rating: {
       type: Number,
       trim: true,
-      required: true,
-      min: 0,
+      required: [true, "Необхідно поставити рейтинг"],
+      min: 1,
       max: 5,
     },
     replies: [
       {
         user: {
           type: ObjectId,
-          ref: 'User',
+          ref: "User",
         },
         text: {
           type: String,
@@ -41,4 +41,4 @@ const commentSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model('Comment', commentSchema);
+export default mongoose.model("Comment", commentSchema);

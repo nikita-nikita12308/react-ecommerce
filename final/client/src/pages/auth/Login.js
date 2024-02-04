@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import Jumbotron from '../../components/cards/Jumbotron';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { useAuth } from '../../context/auth';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import Jumbotron from "../../components/cards/Jumbotron";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useAuth } from "../../context/auth";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Login() {
   // state
-  const [email, setEmail] = useState('ryan@gmail.com');
-  const [password, setPassword] = useState('rrrrrr');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   // hook
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
@@ -28,23 +28,23 @@ export default function Login() {
       if (data?.error) {
         toast.error(data.error);
       } else {
-        localStorage.setItem('auth', JSON.stringify(data));
+        localStorage.setItem("auth", JSON.stringify(data));
         setAuth({ ...auth, token: data.token, user: data.user });
-        toast.success('Login successful');
+        toast.success("Успішний вхід");
         navigate(
           location.state ||
-            `/dashboard/${data?.user?.role === 1 ? 'admin' : 'user'}`
+            `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`
         );
       }
     } catch (err) {
       console.log(err);
-      toast.error('Login failed. Try again.');
+      toast.error("Login failed. Try again.");
     }
   };
 
   return (
     <div>
-      <Jumbotron title="Login" />
+      <Jumbotron title="Вхід" />
 
       <div className="container mt-5">
         <div className="row">
@@ -53,7 +53,7 @@ export default function Login() {
               <input
                 type="email"
                 className="form-control mb-4 p-2"
-                placeholder="Enter your email"
+                placeholder="Напишіть ваш e-mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -61,18 +61,18 @@ export default function Login() {
               <input
                 type="password"
                 className="form-control mb-4 p-2"
-                placeholder="Enter your password"
+                placeholder="Введіть пароль"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
 
               <button className="btn btn-primary" type="submit">
-                Submit
+                Увійти
               </button>
               <button type="button" class="btn btn-link">
-              <NavLink className="nav-link" to="/forgotPassword">
-                Забули пароль ?
-              </NavLink>
+                <NavLink className="nav-link" to="/forgotPassword">
+                  Забули пароль ?
+                </NavLink>
               </button>
             </form>
           </div>
