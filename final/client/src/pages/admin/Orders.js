@@ -15,11 +15,11 @@ export default function AdminOrders() {
   // state
   const [orders, setOrders] = useState([]);
   const [status, setStatus] = useState([
-    "Not processed",
-    "Processing",
-    "Shipped",
-    "Delivered",
-    "Cancelled",
+    "Не оброблено",
+    "Обробка",
+    "Відправлено",
+    "Доставлено",
+    "Скасовано",
   ]);
   const [changedStatus, setChangedStatus] = useState("");
 
@@ -63,7 +63,7 @@ export default function AdminOrders() {
             {orders?.map((o, i) => {
               return (
                 <div
-                  key={o._id}
+                  key={o.orderNumber}
                   className="border shadow bg-light rounded-4 mb-5"
                 >
                   <table className="table">

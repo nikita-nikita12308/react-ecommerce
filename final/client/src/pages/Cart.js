@@ -15,13 +15,13 @@ export default function Cart() {
   return (
     <>
       <Jumbotron
-        title={`Hello ${auth?.token && auth?.user?.name}`}
+        title={`Кошик ${auth?.token && auth?.user?.name}`}
         subTitle={
           cart?.length
-            ? `You have ${cart.length} items in the cart. ${
-                auth?.token ? "" : "Please login to checkout"
+            ? `Ви маєте ${cart.length} продуктів в кошику. ${
+                auth?.token ? "" : "Увійдіть щоб замовити"
               }`
-            : "Your cart is empty"
+            : "Ваш кошик пустий"
         }
       />
 

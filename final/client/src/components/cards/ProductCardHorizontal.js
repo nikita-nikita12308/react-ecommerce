@@ -2,6 +2,7 @@ import moment from "moment";
 import "moment/locale/uk"; // Import Ukrainian locale
 import { useCart } from "../../context/cart";
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 moment.locale("uk");
 export default function ProductCardHorizontal({ p, remove = true }) {
   // context
@@ -44,22 +45,26 @@ export default function ProductCardHorizontal({ p, remove = true }) {
     >
       <div className="row g-0">
         <div className="col-md-4">
-          <img
-            src={`${process.env.REACT_APP_API}/product/photo/${p._id}`}
-            alt={p.name}
-            style={{
-              height: "150px",
-              width: "150px",
-              objectFit: "cover",
-              marginLeft: "-12px",
-              borderRopRightRadius: "0px",
-            }}
-          />
+          <NavLink className="nav-link" to={`/product/${p.slug}`}>
+            <img
+              src={`${process.env.REACT_APP_API}/product/photo/${p._id}`}
+              alt={p.name}
+              style={{
+                height: "150px",
+                width: "150px",
+                objectFit: "cover",
+                marginLeft: "-12px",
+                borderRopRightRadius: "0px",
+              }}
+            />
+          </NavLink>
         </div>
         <div className="col-md-8">
           <div className="card-body">
             <h5 className="card-title">
-              {p?.name}
+              <NavLink className="nav-link-cart" to={`/product/${p.slug}`}>
+                {p?.name}
+              </NavLink>
               {" - "}
               {p?.price.toLocaleString("uk-UA", {
                 style: "currency",

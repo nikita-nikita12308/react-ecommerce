@@ -63,16 +63,16 @@ export default function UserOrders() {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{o?._id}</td>
+                          <td>{o?.orderNumber}</td>
                           <td>{o?.status}</td>
                           <td>{o?.buyer?.name}</td>
                           <td>{moment(o?.createdAt).fromNow()}</td>
                           <td>
-                            {o?.payment?.success ? "Success" : "Failed"}
+                            {o?.payment?.success ? "Оплачено" : "Не оплачено"}
                             {" - "}
                             {o?.cartTotal} грн
                           </td>
-                          <td>{o?.products?.length} products</td>
+                          <td>{o?.products?.length} артикулів</td>
                         </tr>
                       </tbody>
                     </table>
