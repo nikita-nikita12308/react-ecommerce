@@ -21,7 +21,13 @@ export default function AdminOrders() {
     "Доставлено",
     "Скасовано",
   ]);
+  const [paymentStatus, setPaymentStatus] = useState([
+    "Не оплачено",
+    "Оплачено",
+  ]);
+
   const [changedStatus, setChangedStatus] = useState("");
+  const [changedPaymentStatus, setChangedPaymentStatus] = useState("");
 
   useEffect(() => {
     if (auth?.token) getOrders();
@@ -47,10 +53,23 @@ export default function AdminOrders() {
       console.log(err);
     }
   };
-
+  const handlePaymentChange = async (orderId, value) => {
+    setChangedPaymentStatus(value);
+    try {
+      const { data } = await axios.put(`/payment-status/${orderId}`, {
+        status: value,
+      });
+      getOrders();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
-      <Jumbotron title={`Hello ${auth?.user?.name}`} subTitle="Dashboard" />
+      <Jumbotron
+        title={`Вітаємо ${auth?.user?.name}`}
+        subTitle="Панель адміністратора"
+      />
 
       <div className="container-fluid">
         <div className="row">
@@ -58,7 +77,7 @@ export default function AdminOrders() {
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Orders</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Замовлення</div>
 
             {orders?.map((o, i) => {
               return (
@@ -70,11 +89,11 @@ export default function AdminOrders() {
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Buyer</th>
-                        <th scope="col">Ordered</th>
-                        <th scope="col">Payment</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">Покупець</th>
+                        <th scope="col">Замовлено</th>
+                        <th scope="col">Оплата</th>
+                        <th scope="col">Кількість</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -93,10 +112,26 @@ export default function AdminOrders() {
                             ))}
                           </Select>
                         </td>
-                        <td>{o?.buyer?.name}</td>
+                        <td>{o?.fullName}</td>
                         <td>{moment(o?.createdAt).fromNow()}</td>
-                        <td>{o?.payment?.success ? "Success" : "Failed"}</td>
-                        <td>{o?.products?.length} products</td>
+                        <td>
+                          {o?.cartTotal} грн
+                          {" - "}
+                          <Select
+                            bordered={false}
+                            onChange={(value) =>
+                              handlePaymentChange(o._id, value)
+                            }
+                            defaultValue={o?.paymentStatus}
+                          >
+                            {paymentStatus.map((ps, i) => (
+                              <Option key={i} value={ps}>
+                                {ps}
+                              </Option>
+                            ))}
+                          </Select>
+                        </td>
+                        <td>{o?.products?.length} Артикули</td>
                       </tr>
                     </tbody>
                   </table>

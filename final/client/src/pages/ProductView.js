@@ -30,9 +30,10 @@ export default function ProductView() {
   const [related, setRelated] = useState([]);
   const [commentsData, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [newRating, setNewRating] = useState(0);
+  const [newRating, setNewRating] = useState(5);
   const [averageRating, setAverageRating] = useState(0);
   const [totalRating, setTotalRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   // hooks
   const params = useParams();
   const isInCart = cart.some((p) => p._id === product._id);
@@ -82,6 +83,7 @@ export default function ProductView() {
   };
   const handleAddComment = async () => {
     try {
+      setIsLoading(true);
       const { commentData } = await axios.post(
         `/product/comment/${product._id}`,
         {
@@ -98,8 +100,10 @@ export default function ProductView() {
       setNewComment("");
       setNewRating(0);
     } catch (err) {
-      console.error(err);
-      toast.error(err);
+      console.error(err.response.data.message);
+      toast.error(err.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   const handleReply = async (commentId, replyText) => {
@@ -244,8 +248,12 @@ export default function ProductView() {
                 <option value={1}>⭐</option>
               </select>
             </div>
-            <button className="btn btn-primary" onClick={handleAddComment}>
-              Додати
+            <button
+              className="btn btn-primary"
+              onClick={handleAddComment}
+              disabled={isLoading}
+            >
+              {isLoading ? "Додаємо..." : "Додати"}
             </button>
           </div>
           <CommentsList

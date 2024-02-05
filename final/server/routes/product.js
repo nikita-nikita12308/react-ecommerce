@@ -27,6 +27,7 @@ import {
   processPayment,
   orderStatus,
   createOrder,
+  paymentStatus,
 } from "../controllers/product.js";
 
 import {
@@ -53,6 +54,7 @@ router.get("/related-products/:productId/:categoryId", relatedProducts);
 router.get("/braintree/token", getToken);
 router.post("/braintree/payment", requireSignin, processPayment);
 router.put("/order-status/:orderId", requireSignin, isAdmin, orderStatus);
+router.put("/payment-status/:orderId", requireSignin, isAdmin, paymentStatus);
 
 // Comments
 router.post(

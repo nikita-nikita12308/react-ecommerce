@@ -3,30 +3,30 @@ import { NavLink } from "react-router-dom";
 export default function AdminMenu() {
   return (
     <>
-      <div className="p-3 mt-2 mb-2 h4 bg-light">Admin Links</div>
+      <div className="p-3 mt-2 mb-2 h4 bg-light">Адміністрування</div>
 
       <ul className="list-group list-unstyled">
         <li>
           <NavLink className="list-group-item" to="/dashboard/admin/category">
-            Create category
+            Стаорити категорію
           </NavLink>
         </li>
 
         <li>
           <NavLink className="list-group-item" to="/dashboard/admin/product">
-            Create product
+            Створити продукт
           </NavLink>
         </li>
 
         <li>
           <NavLink className="list-group-item" to="/dashboard/admin/products">
-            Products
+            Продукти
           </NavLink>
         </li>
 
         <li>
           <NavLink className="list-group-item" to="/dashboard/admin/orders">
-            Manage orders
+            Замовлення
           </NavLink>
         </li>
       </ul>
