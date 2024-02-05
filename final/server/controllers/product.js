@@ -385,3 +385,21 @@ export const orderStatus = async (req, res) => {
     console.log(err);
   }
 };
+
+export const paymentStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    console.log(req.body);
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { paymentStatus: status },
+      { new: true }
+    ).populate("buyer", "email name");
+    // send email
+    console.log(order);
+    res.json(order);
+  } catch (err) {
+    console.log(err);
+  }
+};

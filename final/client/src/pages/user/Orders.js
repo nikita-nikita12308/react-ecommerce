@@ -68,7 +68,7 @@ export default function UserOrders() {
                           <td>{o?.buyer?.name}</td>
                           <td>{moment(o?.createdAt).fromNow()}</td>
                           <td>
-                            {o?.payment?.success ? "Оплачено" : "Не оплачено"}
+                            {o?.paymentStatus}
                             {" - "}
                             {o?.cartTotal} грн
                           </td>
