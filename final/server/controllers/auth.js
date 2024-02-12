@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import Order from "../models/order.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { mailStyle } from "../helpers/mail.js";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
@@ -178,7 +179,9 @@ export const forgotPassword = async (req, res) => {
       },
       to: user.email,
       subject: "Відновлення паролю",
-      html: `<p>Для зміни паролю перейдіть за <a href="${resetPasswordLink}">посиланням</a>. Посилання дійсне 10 хв.</p>`,
+      html: mailStyle(
+        `<p>Для зміни паролю перейдіть за <a href="${resetPasswordLink}">посиланням</a>. Посилання дійсне 10 хв.</p>`
+      ),
     };
 
     // Send the email

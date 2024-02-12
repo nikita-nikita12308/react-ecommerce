@@ -4,7 +4,7 @@ import slugify from "slugify";
 import braintree from "braintree";
 import dotenv from "dotenv";
 import Order from "../models/order.js";
-import { transporter } from "../helpers/mail.js";
+import { mailStyle, transporter } from "../helpers/mail.js";
 dotenv.config();
 
 // const gateway = new braintree.BraintreeGateway({
@@ -270,63 +270,64 @@ export const createOrder = async (req, res) => {
       cartTotal,
       buyer: user,
     });
+    decrementQuantity(cart);
     res.status(201).json({ success: true, data: createdOrder });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 };
 
-export const processPayment = async (req, res) => {
-  try {
-    // console.log(req.body);
-    const { nonce, cart } = req.body;
+// export const processPayment = async (req, res) => {
+//   try {
+//     // console.log(req.body);
+//     const { nonce, cart } = req.body;
 
-    let total = 0;
-    cart.map((i) => {
-      total += i.price;
-    });
-    // console.log("total => ", total);
+//     let total = 0;
+//     cart.map((i) => {
+//       total += i.price;
+//     });
+//     // console.log("total => ", total);
 
-    let newTransaction = gateway.transaction.sale(
-      {
-        amount: total,
-        paymentMethodNonce: nonce,
-        options: {
-          submitForSettlement: true,
-        },
-      },
-      function (error, result) {
-        if (result) {
-          // res.send(result);
-          // create order
-          const order = new Order({
-            products: cart,
-            payment: result,
-            buyer: req.user._id,
-          }).save();
-          // decrement quantity
-          decrementQuantity(cart);
-          // const bulkOps = cart.map((item) => {
-          //   return {
-          //     updateOne: {
-          //       filter: { _id: item._id },
-          //       update: { $inc: { quantity: -0, sold: +1 } },
-          //     },
-          //   };
-          // });
+//     let newTransaction = gateway.transaction.sale(
+//       {
+//         amount: total,
+//         paymentMethodNonce: nonce,
+//         options: {
+//           submitForSettlement: true,
+//         },
+//       },
+//       function (error, result) {
+//         if (result) {
+//           // res.send(result);
+//           // create order
+//           const order = new Order({
+//             products: cart,
+//             payment: result,
+//             buyer: req.user._id,
+//           }).save();
+//           // decrement quantity
+//           decrementQuantity(cart);
+//           // const bulkOps = cart.map((item) => {
+//           //   return {
+//           //     updateOne: {
+//           //       filter: { _id: item._id },
+//           //       update: { $inc: { quantity: -0, sold: +1 } },
+//           //     },
+//           //   };
+//           // });
 
-          // Product.bulkWrite(bulkOps, {});
+//           // Product.bulkWrite(bulkOps, {});
 
-          res.json({ ok: true });
-        } else {
-          res.status(500).send(error);
-        }
-      }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
+//           res.json({ ok: true });
+//         } else {
+//           res.status(500).send(error);
+//         }
+//       }
+//     );
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 const decrementQuantity = async (cart) => {
   try {
@@ -366,10 +367,14 @@ export const orderStatus = async (req, res) => {
       },
       to: order.buyer.email,
       subject: "Статус Замовлення",
-      html: `
-          <h3>Вітаємо ${order.buyer.name}, Ваш статус замовлення: <span style="color:red;">${order.status}</span></h3>
-          <p>Відвідайте <a href="${req.protocol}://${process.env.BASE_LINK}/dashboard/user/orders">особистий кабінет</a> для того щоб отримати більше інформації.</p>
-        `,
+      html: mailStyle(`
+      <h3>Вітаємо, ${order.fullName}!</h3>
+      <p>Статус вашого замовлення: <span class="status">${order.status}</span></p>
+      <p>
+        Деталі вашого замовлення доступні в
+        <a href="${req.protocol}://${process.env.BASE_LINK}/dashboard/user/orders">особистому кабінеті</a>.
+      </p>
+    `),
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
