@@ -28,7 +28,7 @@ export default function AdminProducts() {
   return (
     <>
       <Jumbotron
-        title={`Hello ${auth?.user?.name}`}
+        title={`Вітаємо ${auth?.user?.name}`}
         subTitle="Admin Dashboard"
       />
 
@@ -38,7 +38,7 @@ export default function AdminProducts() {
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Products</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Продукти</div>
 
             {products?.map((p) => (
               <Link

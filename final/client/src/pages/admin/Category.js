@@ -39,11 +39,11 @@ export default function AdminCategory() {
       } else {
         loadCategories();
         setName("");
-        toast.success(`"${data.name}" is created`);
+        toast.success(`"${data.name}" створено`);
       }
     } catch (err) {
       console.log(err);
-      toast.error("Create category failed. Try again.");
+      toast.error("Не вдалося створити категорію. Спробуйте знову.");
     }
   };
 
@@ -56,7 +56,7 @@ export default function AdminCategory() {
       if (data?.error) {
         toast.error(data.error);
       } else {
-        toast.success(`"${data.name}" is updated`);
+        toast.success(`"${data.name}" оновлено`);
         setSelected(null);
         setUpdatingName("");
         loadCategories();
@@ -64,7 +64,7 @@ export default function AdminCategory() {
       }
     } catch (err) {
       console.log(err);
-      toast.error("Category may already exist. Try again.");
+      toast.error("Можливо, категорія вже існує. Спробуйте знову.");
     }
   };
 
@@ -75,21 +75,21 @@ export default function AdminCategory() {
       if (data?.error) {
         toast.error(data.error);
       } else {
-        toast.success(`"${data.name}" is deleted`);
+        toast.success(`"${data.name}" видалено`);
         setSelected(null);
         loadCategories();
         setVisible(false);
       }
     } catch (err) {
       console.log(err);
-      toast.error("Category may already exist. Try again.");
+      toast.error("Можливо, категорія вже існує. Спробуйте знову.");
     }
   };
 
   return (
     <>
       <Jumbotron
-        title={`Hello ${auth?.user?.name}`}
+        title={`Вітаємо ${auth?.user?.name}`}
         subTitle="Admin Dashboard"
       />
 
@@ -99,7 +99,9 @@ export default function AdminCategory() {
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Manage Categories</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">
+              Управління категоріями
+            </div>
 
             <CategoryForm
               value={name}
@@ -135,7 +137,7 @@ export default function AdminCategory() {
                 value={updatingName}
                 setValue={setUpdatingName}
                 handleSubmit={handleUpdate}
-                buttonText="Update"
+                buttonText="Оновити"
                 handleDelete={handleDelete}
               />
             </Modal>

@@ -1,18 +1,10 @@
 import Product from "../models/product.js";
 import fs from "fs";
 import slugify from "slugify";
-import braintree from "braintree";
 import dotenv from "dotenv";
 import Order from "../models/order.js";
 import { mailStyle, transporter } from "../helpers/mail.js";
 dotenv.config();
-
-// const gateway = new braintree.BraintreeGateway({
-//   environment: braintree.Environment.Sandbox,
-//   merchantId: process.env.BRAINTREE_MERCHANT_ID,
-//   publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-//   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-// });
 
 export const create = async (req, res) => {
   try {
@@ -270,7 +262,37 @@ export const createOrder = async (req, res) => {
       cartTotal,
       buyer: user,
     });
-    decrementQuantity(cart);
+
+    const mailOptions = {
+      from: {
+        name: "Сирна Насолода",
+        address: process.env.GMAIL_USER,
+      },
+      to: process.env.OWNER_MAIL,
+      subject: "Нове Замовлення",
+      html: mailStyle(`
+      <h3>Хтось замовив продукт з магазину!</h3>
+      <p>Статус  замовлення можна змінити в кабінеті адміністратора</p>
+      <p>
+        Деталі  замовлення доступні в
+        <a href="${req.protocol}://${process.env.BASE_LINK}/dashboard/admin/orders">кабінеті адміністратора</a>.
+      </p>
+      <p>ПІБ ${fullName}</p>
+      <p>Телефон ${phone}</p>
+      <p>Місто / Село : ${city}</p>
+      <p>Область / Округ : ${region}</p>
+      <p>Номер відділення Нової Пошти : ${postNumber}</p>
+      <p>Всього ${cartTotal} грн </p>
+
+    `),
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
     res.status(201).json({ success: true, data: createdOrder });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -329,24 +351,24 @@ export const createOrder = async (req, res) => {
 //   }
 // };
 
-const decrementQuantity = async (cart) => {
-  try {
-    // build mongodb query
-    const bulkOps = cart.map((item) => {
-      return {
-        updateOne: {
-          filter: { _id: item._id },
-          update: { $inc: { quantity: -0, sold: +1 } },
-        },
-      };
-    });
+// const decrementQuantity = async (cart) => {
+//   try {
+//     // build mongodb query
+//     const bulkOps = cart.map((item) => {
+//       return {
+//         updateOne: {
+//           filter: { _id: item._id },
+//           update: { $inc: { quantity: -0, sold: +1 } },
+//         },
+//       };
+//     });
 
-    const updated = await Product.bulkWrite(bulkOps, {});
-    console.log("blk updated", updated);
-  } catch (err) {
-    console.log(err);
-  }
-};
+//     const updated = await Product.bulkWrite(bulkOps, {});
+//     console.log("blk updated", updated);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export const orderStatus = async (req, res) => {
   try {

@@ -264,7 +264,7 @@ export default function ProductView() {
         </div>
 
         <div className="col-md-3">
-          <h2>Related Products</h2>
+          <h2>Схожі Товари</h2>
           <hr />
           {related?.length < 1 && <p>Nothing found</p>}
           {related?.map((p) => (

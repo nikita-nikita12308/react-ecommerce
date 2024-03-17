@@ -90,3 +90,29 @@ export const getAverageRating = async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+
+export const getAllComments = async (req, res) => {
+  try {
+    const { page = 1, count = 5 } = req.query;
+    const skip = (page - 1) * count;
+    const comments = await Comment.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(count)
+      .populate({
+        path: "user",
+        select: "name",
+      })
+      .populate({
+        path: "product",
+        select: "name slug",
+      })
+      .populate({
+        path: "replies.user",
+        select: "name",
+      });
+    res.status(200).json({ success: true, page, count, comments });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
