@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export default function Login() {
   // state
-  const [email, setEmail] = useState("ryan@gmail.com");
+  const [email, setEmail] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   // console.log("location => ", location);
 
@@ -39,7 +39,7 @@ export default function Login() {
               <input
                 type="email"
                 className="form-control mb-4 p-2"
-                placeholder="Enter your email"
+                placeholder="Напишіть ваш e-mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />

@@ -35,6 +35,7 @@ import {
   getAverageRating,
   deleteComment,
   updateComment,
+  getAllComments,
 } from "../controllers/comment.js";
 
 router.post("/product", requireSignin, isAdmin, formidable(), create);
@@ -72,7 +73,7 @@ router.post(
 );
 router.get("/product/comment/:productId", listComments);
 router.get("/product/average-rating/:productId", getAverageRating);
-
+router.get("/comments", getAllComments);
 //Order
 router.post("/order", requireSignin, createOrder);
 export default router;

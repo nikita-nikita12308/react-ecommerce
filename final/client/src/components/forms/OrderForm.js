@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../context/cart';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/cart";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const centerFormStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  minHeight: '100vh',
-  marginTop: '40px',
+  display: "flex",
+  justifyContent: "center",
+  minHeight: "100vh",
+  marginTop: "40px",
 };
 
 const headerStyle = {
-  marginBottom: '20px',
-  marginRight: '20px',
+  marginBottom: "20px",
+  marginRight: "20px",
 };
 
 function OrderForm() {
@@ -21,9 +21,9 @@ function OrderForm() {
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
   const [formData, setFormData] = useState({
-    city: '',
-    phone: '',
-    email: '',
+    city: "",
+    phone: "",
+    email: "",
   });
 
   useEffect(() => {
@@ -70,16 +70,16 @@ function OrderForm() {
         toast.error(orderData.error);
       } else {
         toast.success(`Order is created`);
-        navigate('/dashboard/user/orders');
+        navigate("/dashboard/user/orders");
         setCart([]);
-        localStorage.removeItem('cart');
+        localStorage.removeItem("cart");
       }
     } catch (err) {
       console.error(err.response.data.error);
       toast.error(err.response.data.error);
     }
-    console.log('Form submitted:', JSON.stringify(formData));
-    console.log('cart: ' + JSON.stringify(cartOrder) + ' Cart Total: ' + total);
+    console.log("Form submitted:", JSON.stringify(formData));
+    console.log("cart: " + JSON.stringify(cartOrder) + " Cart Total: " + total);
   };
 
   // JSX for the form page with Bootstrap styling
@@ -188,8 +188,8 @@ function OrderForm() {
                       </td>
                       <td>
                         {(item.price * item.cart_quantity).toLocaleString(
-                          'uk-UA',
-                          { style: 'currency', currency: 'UAH' }
+                          "uk-UA",
+                          { style: "currency", currency: "UAH" }
                         )}
                       </td>
                     </tr>
@@ -197,29 +197,12 @@ function OrderForm() {
                 </tbody>
               </table>
               <p>
-                Загалом:{' '}
-                {total.toLocaleString('uk-UA', {
-                  style: 'currency',
-                  currency: 'UAH',
+                Загалом:{" "}
+                {total.toLocaleString("uk-UA", {
+                  style: "currency",
+                  currency: "UAH",
                 })}
               </p>
-            </div>
-            <div className="mb-3">
-              <p>Виберіть спосіб оплати:</p>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="paymentMethod"
-                  id="cashOnDelivery"
-                  value="Готівка"
-                  onChange={handleInputChange}
-                />
-                <label className="form-check-label" htmlFor="cashOnDelivery">
-                  Оплата готівкою або карткою при отриманні у відділенні Нової
-                  пошти
-                </label>
-              </div>
             </div>
           </div>
           <button type="submit" className="btn btn-primary">

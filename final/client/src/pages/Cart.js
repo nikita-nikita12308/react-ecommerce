@@ -18,7 +18,7 @@ export default function Cart() {
         title={`Кошик ${auth?.token && auth?.user?.name}`}
         subTitle={
           cart?.length
-            ? `Ви маєте ${cart.length} продуктів в кошику. ${
+            ? `Ви маєте ${cart?.length} продуктів в кошику. ${
                 auth?.token ? "" : "Увійдіть щоб замовити"
               }`
             : "Ваш кошик пустий"
@@ -39,6 +39,7 @@ export default function Cart() {
                   >
                     Продовжити покупки
                   </button>
+                  {console.log(cart.length)}
                 </div>
               )}
             </div>
@@ -46,7 +47,7 @@ export default function Cart() {
         </div>
       </div>
 
-      {cart?.length && (
+      {cart?.length > 0 && (
         <div className="container">
           <div className="row">
             <div className="col-md-8">

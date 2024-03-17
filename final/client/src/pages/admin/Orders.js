@@ -138,7 +138,6 @@ export default function AdminOrders() {
 
                   <div className="container">
                     <div className="row m-2">
-                      {console.log("Продукти: ", o.products)}
                       {o?.products?.map((p, i) => (
                         <OrderProductCardHorizontal
                           key={i}

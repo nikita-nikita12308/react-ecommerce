@@ -101,7 +101,7 @@ export default function AdminProductUpdate() {
   return (
     <>
       <Jumbotron
-        title={`Hello ${auth?.user?.name}`}
+        title={`Вітаємо ${auth?.user?.name}`}
         subTitle="Admin Dashboard"
       />
 
@@ -111,7 +111,7 @@ export default function AdminProductUpdate() {
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Update Product</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Оновлення продукту</div>
 
             {photo ? (
               <div className="text-center">
@@ -137,7 +137,7 @@ export default function AdminProductUpdate() {
 
             <div className="pt-2">
               <label className="btn btn-outline-secondary col-12 mb-3">
-                {photo ? photo.name : "Upload photo"}
+                {photo ? photo.name : "Завантажити фото"}
                 <input
                   type="file"
                   name="photo"
@@ -151,7 +151,7 @@ export default function AdminProductUpdate() {
             <input
               type="text"
               className="form-control p-2 mb-3"
-              placeholder="Write a name"
+              placeholder="Напишіть назву"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -159,7 +159,7 @@ export default function AdminProductUpdate() {
             <textarea
               type="text"
               className="form-control p-2 mb-3"
-              placeholder="Write a description"
+              placeholder="Напишіть опис"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -167,7 +167,7 @@ export default function AdminProductUpdate() {
             <input
               type="number"
               className="form-control p-2 mb-3"
-              placeholder="Enter price"
+              placeholder="Вкажіть ціну"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
@@ -177,7 +177,7 @@ export default function AdminProductUpdate() {
               bordered={false}
               size="large"
               className="form-select mb-3"
-              placeholder="Choose category"
+              placeholder="Вибиберіть категорію"
               onChange={(value) => setCategory(value)}
               value={category}
             >
@@ -204,17 +204,17 @@ export default function AdminProductUpdate() {
               type="number"
               min="1"
               className="form-control p-2 mb-3"
-              placeholder="Enter quantity"
+              placeholder="Вкажіть кількість"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />
 
             <div className="d-flex justify-content-between">
               <button onClick={handleSubmit} className="btn btn-primary mb-5">
-                Update
+                Оновити
               </button>
               <button onClick={handleDelete} className="btn btn-danger mb-5">
-                Delete
+                Видалити
               </button>
             </div>
           </div>

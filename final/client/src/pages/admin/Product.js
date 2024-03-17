@@ -65,7 +65,7 @@ export default function AdminProduct() {
   return (
     <>
       <Jumbotron
-        title={`Hello ${auth?.user?.name}`}
+        title={`Вітаємо ${auth?.user?.name}`}
         subTitle="Admin Dashboard"
       />
 
@@ -75,7 +75,7 @@ export default function AdminProduct() {
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Create Products</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Створити продукт</div>
 
             {photo && (
               <div className="text-center">
@@ -90,7 +90,7 @@ export default function AdminProduct() {
 
             <div className="pt-2">
               <label className="btn btn-outline-secondary col-12 mb-3">
-                {photo ? photo.name : "Upload photo"}
+                {photo ? photo.name : "Завантажити фото"}
                 <input
                   type="file"
                   name="photo"
@@ -104,7 +104,7 @@ export default function AdminProduct() {
             <input
               type="text"
               className="form-control p-2 mb-3"
-              placeholder="Write a name"
+              placeholder="Напишіть назву"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -112,7 +112,7 @@ export default function AdminProduct() {
             <textarea
               type="text"
               className="form-control p-2 mb-3"
-              placeholder="Write a description"
+              placeholder="Напишіть опис"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -120,7 +120,7 @@ export default function AdminProduct() {
             <input
               type="number"
               className="form-control p-2 mb-3"
-              placeholder="Enter price"
+              placeholder="Введіть ціну "
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
@@ -130,7 +130,7 @@ export default function AdminProduct() {
               bordered={false}
               size="large"
               className="form-select mb-3"
-              placeholder="Choose category"
+              placeholder="Виберіть категорію"
               onChange={(value) => setCategory(value)}
             >
               {categories?.map((c) => (
@@ -155,13 +155,13 @@ export default function AdminProduct() {
               type="number"
               min="1"
               className="form-control p-2 mb-3"
-              placeholder="Enter quantity"
+              placeholder="Введіть кількість"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />
 
             <button onClick={handleSubmit} className="btn btn-primary mb-5">
-              Submit
+              Підтвердити
             </button>
           </div>
         </div>

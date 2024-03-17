@@ -8,7 +8,7 @@ export default function AdminMenu() {
       <ul className="list-group list-unstyled">
         <li>
           <NavLink className="list-group-item" to="/dashboard/admin/category">
-            Стаорити категорію
+            Створити категорію
           </NavLink>
         </li>
 
@@ -27,6 +27,11 @@ export default function AdminMenu() {
         <li>
           <NavLink className="list-group-item" to="/dashboard/admin/orders">
             Замовлення
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className="list-group-item" to="/dashboard/admin/comments">
+            Коментарі
           </NavLink>
         </li>
       </ul>
