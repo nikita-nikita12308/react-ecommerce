@@ -26,8 +26,8 @@ export default function Menu() {
     <>
       <ul className="nav d-flex justify-content-between shadow-sm mb-2 sticky-top bg-light">
         <li className="nav-item">
-          <a className="nav-link phone-li" href="tel:+380679299456">
-            Телефон: +380679299456
+          <a className="nav-link phone-li" href="tel:+380677467596">
+            Телефон: +380677467596
           </a>
         </li>
         <li className="nav-item">

@@ -50,8 +50,6 @@ router.get("/list-products/:page", listProducts);
 router.get("/products/search/:keyword", productsSearch);
 router.get("/related-products/:productId/:categoryId", relatedProducts);
 
-// router.get("/braintree/token", getToken);
-// router.post("/braintree/payment", requireSignin, processPayment);
 router.put("/order-status/:orderId", requireSignin, isAdmin, orderStatus);
 router.put("/payment-status/:orderId", requireSignin, isAdmin, paymentStatus);
 
